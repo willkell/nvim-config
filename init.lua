@@ -19,7 +19,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.swapfile = false
 vim.o.backup = false
-vim.o.undodir = '~/.config/nvim/undodir/'
+vim.o.undodir = '~/.config/nvim/undodir'
 vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.scrolloff = 6
@@ -242,18 +242,61 @@ dap.adapters.cppdbg = {
   command = '/home/wk/.vscode/extensions/ms-vscode.cpptools-1.8.4/debugAdapters/bin/OpenDebugAD7',
 }
 
--- ui
-require("dapui").setup()
-local dapui = require("dapui")
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
+-- keymaps
+local dapui = require 'dapui'
+local dapend = nil
+local dapmaps = {
+    {'n', '<C-c>', function() dap.continue() end, opts},
+    {'n', '<C-s>', function() dap.step_over() end, opts},
+    {'n', '<C-d>', function() dap.step_into() end, opts},
+    {'n', '<C-f>', function() dap.step_out() end, opts},
+    {'n', '<C-v>', function() dap.run_to_cursor() end, opts},
+    {'n', '<C-o>', function() dap.repl.toggle() end, opts},
+    {'n', '<C-x>', function() dapend() end, opts},
+}
 
+function dapend ()
+    dap.terminate()
+    dapui.close()
+    for _, map in ipairs(dapmaps) do
+        vim.keymap.del(map[1], map[2])
+    end
+    vim.cmd(':bd! */bin/sh')
+end
+vim.keymap.set('n', '<leader>dd', dap.continue, opts)
+vim.keymap.set('n', '<leader>dl', dap.run_last, opts)
+vim.keymap.set('n', '<leader>dbb', dap.toggle_breakpoint, opts)
+vim.keymap.set('n', '<leader>dbc', function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, opts)
+vim.keymap.set('n', '<leader>dbp', function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, opts)
+
+
+
+-- ui
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+    for _, map in ipairs(dapmaps) do
+        vim.keymap.set(map[1], map[2], map[3], map[4])
+    end
+end
+dap.listeners.after.event_terminated["dapui_config"] = function()
+    dapui.close()
+    for _, map in ipairs(dapmaps) do
+        vim.keymap.del(map[1], map[2])
+    end
+    vim.cmd(':bd! */bin/sh')
+end
 -- toggleterm
 vim.keymap.set('n', '<leader>tt', ':ToggleTerm<CR>', opts)
+
+-- local configs
+require('config-local').setup {
+    -- Default configuration (optional)
+    config_files = { ".vimrc.lua", ".vimrc" },  -- Config file patterns to load (lua supported)
+    hashfile = vim.fn.stdpath("data") .. "/config-local", -- Where the plugin keeps files data
+    autocommands_create = true,                 -- Create autocommands (VimEnter, DirectoryChanged)
+    commands_create = true,                     -- Create commands (ConfigSource, ConfigEdit, ConfigTrust, ConfigIgnore)
+    silent = true,                             -- Disable plugin messages (Config loaded/ignored)
+}
+
