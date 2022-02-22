@@ -69,6 +69,7 @@ vim.keymap.set('i', '<Down>', '<C-o>gj', opts)
 vim.keymap.set('i', '<Up>', '<C-o>gk', opts)
 vim.keymap.set('n', '<leader>hrr', ':so /home/wk/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
+vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 
 
 
@@ -242,7 +243,7 @@ dap.adapters.cppdbg = {
   command = '/home/wk/.vscode/extensions/ms-vscode.cpptools-1.8.4/debugAdapters/bin/OpenDebugAD7',
 }
 
--- keymaps
+--  dap keymaps
 local dapui = require 'dapui'
 local dapend = nil
 local dapmaps = {
