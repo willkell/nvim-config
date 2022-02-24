@@ -185,7 +185,7 @@ cmp.setup({
 
         ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-               cmp.select_prev_item()
+                cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             else
@@ -193,37 +193,12 @@ cmp.setup({
             end
         end, { "i", "s" }),
     },
-    sources = cmp.config.sources({
+    sources = cmp.config.sources {
     { name = 'nvim_lsp' },
     { name = 'luasnip' }, -- For luasnip users.
-    }, {
-        { name = 'buffer' },
-        })
-})
-
--- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-        { name = 'buffer' },
-        })
-})
-
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline('/', {
-    sources = {
-    { name = 'buffer' }
+    { name = 'path' }, -- For luasnip users.
+    { name = 'buffer' }, -- For luasnip users.
     }
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-    sources = cmp.config.sources({
-    { name = 'path' }
-    }, {
-        { name = 'cmdline' }
-        })
 })
 
 -- insert brackets after completion
