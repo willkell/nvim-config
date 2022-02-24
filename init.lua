@@ -2,7 +2,7 @@
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+    vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
@@ -35,7 +35,7 @@ require('packer').startup(function()
     use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use {'nvim-telescope/telescope.nvim',
-	requires = { {'nvim-lua/plenary.nvim'}}}
+        requires = {{'nvim-lua/plenary.nvim'}}}
     use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
     use 'kyazdani42/nvim-web-devicons'
     use 'neovim/nvim-lspconfig'
@@ -55,8 +55,6 @@ require('packer').startup(function()
     use 'saadparwaiz1/cmp_luasnip'
     use 'L3MON4D3/LuaSnip'
     use 'rafamadriz/friendly-snippets'
-    use 'tpope/vim-endwise'
-    use 'rstacruz/vim-closer'
     use 'klen/nvim-config-local'
     use 'akinsho/toggleterm.nvim'
     use 'ludovicchabant/vim-gutentags'
@@ -64,6 +62,9 @@ require('packer').startup(function()
     use { "tami5/sqlite.lua" }
     use {'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua'}
     use 'theHamsta/nvim-dap-virtual-text'
+    use 'p00f/nvim-ts-rainbow'
+    use 'RRethy/nvim-treesitter-endwise'
+    use 'windwp/nvim-autopairs'
 end)
 
 --util keymaps
@@ -88,11 +89,11 @@ local lsp_installer = require "nvim-lsp-installer"
 
 -- Include the servers you want to have installed by default below
 local servers = {
-  "bashls",
-  "pyright",
-  "clangd",
-  "sumneko_lua",
-  "texlab",
+    "bashls",
+    "pyright",
+    "clangd",
+    "sumneko_lua",
+    "texlab",
 }
 
 for _, name in pairs(servers) do
@@ -107,26 +108,25 @@ end
 
 local on_attach = function(_, bufnr)
     --Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>wl', vim.inspect(vim.lsp.buf.list_workspac_folders()), {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>e', vim.lsp.diagnostic.show_line_diagnostics, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '[d', vim.lsp.diagnostic.goto_prev, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', ']d', vim.lsp.diagnostic.goto_next, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>q', vim.lsp.diagnostic.set_loclist, {buffer = bufnr, table.unpack(opts)})
-    vim.keymap.set('n', '<space>=', vim.lsp.buf.formatting, {buffer = bufnr, table.unpack(opts)})
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>wl', vim.inspect(vim.lsp.buf.list_workspace_folders()), {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>e', vim.lsp.diagnostic.show_line_diagnostics, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '[d', vim.lsp.diagnostic.goto_prev, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', ']d', vim.lsp.diagnostic.goto_next, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>=', vim.lsp.buf.formatting, {buffer = bufnr, unpack(opts)})
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -135,10 +135,10 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+    lspconfig[lsp].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+    }
 end
 
 -- Set completeopt to have a better completion experience
@@ -149,6 +149,10 @@ local luasnip = require 'luasnip'
 
 -- nvim-cmp setup
 local cmp = require'cmp'
+local has_words_before = function()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
 
 cmp.setup({
     snippet = {
@@ -167,39 +171,64 @@ cmp.setup({
             c = cmp.mapping.close(),
         }),
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            elseif has_words_before() then
+                cmp.complete()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
+
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
     },
     sources = cmp.config.sources({
     { name = 'nvim_lsp' },
-        { name = 'luasnip' }, -- For luasnip users.
+    { name = 'luasnip' }, -- For luasnip users.
     }, {
         { name = 'buffer' },
         })
 })
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
     sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it. 
+    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
     }, {
-      { name = 'buffer' },
-    })
-  })
+        { name = 'buffer' },
+        })
+})
 
-  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline('/', {
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
     sources = {
-      { name = 'buffer' }
+    { name = 'buffer' }
     }
-  })
+})
 
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
     sources = cmp.config.sources({
-      { name = 'path' }
+    { name = 'path' }
     }, {
-      { name = 'cmdline' }
-    })
-  })
+        { name = 'cmdline' }
+        })
+})
+
+-- insert brackets after completion
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
 
 local sumneko_binary_path = vim.fn.exepath('lua-language-server')
 local sumneko_root_path = vim.fn.fnamemodify(sumneko_binary_path, ':h:h:h')
@@ -241,22 +270,22 @@ require('nvim_comment').setup()
 -- dap
 local dap = require('dap')
 dap.adapters.cppdbg = {
-  id = 'cppdbg',
-  type = 'executable',
-  command = '/home/wk/.vscode/extensions/ms-vscode.cpptools-1.8.4/debugAdapters/bin/OpenDebugAD7',
+    id = 'cppdbg',
+    type = 'executable',
+    command = '/home/wk/.vscode/extensions/ms-vscode.cpptools-1.8.4/debugAdapters/bin/OpenDebugAD7',
 }
 
 --  dap keymaps
 local dapui = require 'dapui'
 local dapend = nil
 local dapmaps = {
-    {'n', '<C-c>', function() dap.continue() end, opts},
-    {'n', '<C-s>', function() dap.step_over() end, opts},
-    {'n', '<C-d>', function() dap.step_into() end, opts},
-    {'n', '<C-f>', function() dap.step_out() end, opts},
-    {'n', '<C-v>', function() dap.run_to_cursor() end, opts},
-    {'n', '<C-o>', function() dap.repl.toggle() end, opts},
-    {'n', '<C-x>', function() dapend() end, opts},
+{'n', '<C-c>', function() dap.continue() end, opts},
+{'n', '<C-s>', function() dap.step_over() end, opts},
+{'n', '<C-d>', function() dap.step_into() end, opts},
+{'n', '<C-f>', function() dap.step_out() end, opts},
+{'n', '<C-v>', function() dap.run_to_cursor() end, opts},
+{'n', '<C-o>', function() dap.repl.toggle() end, opts},
+{'n', '<C-x>', function() dapend() end, opts},
 }
 
 function dapend ()
@@ -322,6 +351,8 @@ require'nvim-treesitter.configs'.setup {
     highlight = { enable = true },
     incremental_selection = { enable = true },
     indent = { enable = true },
+    rainbow = { enable = true, extended_mode = true },
+    endwise = { enable = true },
 }
 
 --dap virtual text
@@ -329,3 +360,9 @@ require('nvim-dap-virtual-text').setup {
     highlight_changed_variables = true,
     highlight_new_as_changed = true,
 }
+
+-- autopairs
+local npairs = require'nvim-autopairs'
+npairs.setup({
+    check_ts = true
+})
