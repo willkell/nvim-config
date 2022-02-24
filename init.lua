@@ -343,3 +343,10 @@ local npairs = require'nvim-autopairs'
 npairs.setup({
     check_ts = true
 })
+
+
+-- fugitive
+vim.keymap.set('n', '<leader>gg', ':Git<CR>', opts)
+vim.keymap.set('n', '<leader>ga', ':Git add *<CR>', opts)
+vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', opts)
+vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
