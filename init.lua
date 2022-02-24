@@ -196,9 +196,9 @@ cmp.setup({
     },
     sources = cmp.config.sources {
     { name = 'nvim_lsp' },
-    { name = 'luasnip' }, -- For luasnip users.
-    { name = 'path' }, -- For luasnip users.
-    { name = 'buffer' }, -- For luasnip users.
+    { name = 'luasnip' }, 
+    { name = 'path' },
+    { name = 'buffer' },
     }
 })
 
