@@ -35,7 +35,7 @@ require('packer').startup(function()
     use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use {'nvim-telescope/telescope.nvim',
-        requires = {{'nvim-lua/plenary.nvim'}}}
+        requires = {'nvim-lua/plenary.nvim'}}
     use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
     use 'kyazdani42/nvim-web-devicons'
     use 'neovim/nvim-lspconfig'
@@ -59,6 +59,7 @@ require('packer').startup(function()
     use 'akinsho/toggleterm.nvim'
     use 'ludovicchabant/vim-gutentags'
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use 'nvim-telescope/telescope-file-browser.nvim'
     use { "tami5/sqlite.lua" }
     use {'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua'}
     use 'theHamsta/nvim-dap-virtual-text'
@@ -320,6 +321,7 @@ vim.keymap.set('n', '<leader>ff', tel_built.find_files, opts)
 vim.keymap.set('n', '<leader>fg', tel_built.live_grep, opts)
 vim.keymap.set('n', '<leader>fb', tel_built.buffers, opts)
 vim.keymap.set('n', '<leader>fh', tel_built.help_tags, opts)
+vim.keymap.set('n', '<leader>fb', telescope.extensions.file_browser.file_browser, opts)
 
 -- treesitter
 require'nvim-treesitter.configs'.setup {

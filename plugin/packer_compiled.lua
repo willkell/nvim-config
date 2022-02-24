@@ -179,6 +179,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/sqlite.lua",
     url = "https://github.com/tami5/sqlite.lua"
   },
+  ["telescope-file-browser.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/telescope-file-browser.nvim",
+    url = "https://github.com/nvim-telescope/telescope-file-browser.nvim"
+  },
   ["telescope-frecency.nvim"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/telescope-frecency.nvim",
