@@ -136,7 +136,7 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 -- Enable the following language servers
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
-        on_attach = on_attach,
+        on_attach = on_attach(_, 0),
         capabilities = capabilities,
     }
 end
@@ -185,7 +185,7 @@ cmp.setup({
 
         ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_prev_item()
+               cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             else
@@ -230,20 +230,20 @@ cmp.setup.cmdline(':', {
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
 
-local sumneko_binary_path = vim.fn.exepath('lua-language-server')
-local sumneko_root_path = vim.fn.fnamemodify(sumneko_binary_path, ':h:h:h')
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 require'lspconfig'.sumneko_lua.setup {
-    cmd = {sumneko_binary_path, "-E", sumneko_root_path .. "/main.lua"};
+    on_attach = on_attach(_, 0),
+    capabilities = capabilities,
     settings = {
         Lua = {
             runtime = {
                 -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
                 version = 'LuaJIT',
                 -- Setup your lua path
+                path = '/usr/bin/lua'
             },
             diagnostics = {
                 -- Get the language server to recognize the `vim` global
@@ -252,7 +252,7 @@ require'lspconfig'.sumneko_lua.setup {
             workspace = {
                 -- Make the server aware of Neovim runtime files
                 checkThirdParty = false,
-                library = "${3rd}/love2d/library",
+                library = vim.api.nvim_get_runtime_file("", true),
                 preloadFileSize = 2000000
             },
             telemetry = {
