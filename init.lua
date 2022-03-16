@@ -11,7 +11,6 @@ vim.o.softtabstop = 4
 vim.o.hidden = true
 vim.o.relativenumber = true
 vim.o.number = true
-vim.o.exrc = true
 vim.o.errorbells = false
 vim.o.smartindent = true
 vim.o.hlsearch = false
@@ -27,7 +26,7 @@ vim.o.colorcolumn = '80'
 vim.o.signcolumn = 'yes'
 vim.g.mapleader = " "
 vim.o.termguicolors = true
-vim.cmd[[colorscheme zenburn]]
+vim.cmd[[colorscheme vilight]]
 vim.o.mouse = 'a'
 
 local use = require('packer').use
@@ -41,7 +40,6 @@ require('packer').startup(function()
     use 'neovim/nvim-lspconfig'
     use 'mfussenegger/nvim-dap'
     use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
-    use 'tanvirtin/monokai.nvim'
     use 'tpope/vim-surround'
     use 'tpope/vim-fugitive'
     use 'terrortylor/nvim-comment'
@@ -74,12 +72,13 @@ vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
 vim.keymap.set({'n', 'v'}, 'k', 'gk', opts)
 vim.keymap.set('i', '<Down>', '<C-o>gj', opts)
 vim.keymap.set('i', '<Up>', '<C-o>gk', opts)
-vim.keymap.set('n', '<leader>hrr', ':so /home/wk/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>hrr', ':so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
 vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
+vim.keymap.set('n', '<leader>tb', ':TexlabBuild<CR>', opts)
 
 
 
@@ -196,7 +195,7 @@ cmp.setup({
     },
     sources = cmp.config.sources {
     { name = 'nvim_lsp' },
-    { name = 'luasnip' }, 
+    { name = 'luasnip' },
     { name = 'path' },
     { name = 'buffer' },
     }
@@ -328,7 +327,7 @@ require'nvim-treesitter.configs'.setup {
     highlight = { enable = true },
     incremental_selection = { enable = true },
     indent = { enable = true },
-    rainbow = { enable = true, extended_mode = true },
+    -- rainbow = { enable = true, extended_mode = true },
     endwise = { enable = true },
 }
 
