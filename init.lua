@@ -44,9 +44,6 @@ require('packer').startup(function()
     use 'tpope/vim-fugitive'
     use 'terrortylor/nvim-comment'
     use 'mbbill/undotree'
-    use 'vim-airline/vim-airline'
-    use 'preservim/nerdtree'
-    use 'vim-airline/vim-airline-themes'
     use 'williamboman/nvim-lsp-installer'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
@@ -64,22 +61,27 @@ require('packer').startup(function()
     use 'p00f/nvim-ts-rainbow'
     use 'RRethy/nvim-treesitter-endwise'
     use 'windwp/nvim-autopairs'
+    use 'nvim-lualine/lualine.nvim'
 end)
 
 --util keymaps
 local opts = {silent = true, remap = false}
 vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
 vim.keymap.set({'n', 'v'}, 'k', 'gk', opts)
-vim.keymap.set('i', '<Down>', '<C-o>gj', opts)
-vim.keymap.set('i', '<Up>', '<C-o>gk', opts)
-vim.keymap.set('n', '<leader>hrr', ':so ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set({'n', 'v', 'i'}, '<Down>',function () vim.api.nvim_command('normal gj') end, opts)
+vim.keymap.set({'n', 'v', 'i'}, '<Up>', function () vim.api.nvim_command('normal gk') end, opts)
+vim.keymap.set('n', '<leader>cr', ':so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
+vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
 vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
 vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
 vim.keymap.set('n', '<leader>tb', ':TexlabBuild<CR>', opts)
-
+vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>s', function() vim.api.nvim_command('write') end, opts)
+vim.keymap.set('n', '<leader>Q', ':wqa!<CR>', opts)
+vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
 
 
 
@@ -349,3 +351,6 @@ vim.keymap.set('n', '<leader>gg', ':Git<CR>', opts)
 vim.keymap.set('n', '<leader>ga', ':Git add *<CR>', opts)
 vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', opts)
 vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
+
+-- lualine
+require'lualine'.setup()
