@@ -70,14 +70,14 @@ vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
 vim.keymap.set({'n', 'v'}, 'k', 'gk', opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Down>',function () vim.api.nvim_command('normal gj') end, opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Up>', function () vim.api.nvim_command('normal gk') end, opts)
-vim.keymap.set('n', '<leader>cr', ':so ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>cl', ':so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
 vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
 vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
-vim.keymap.set('n', '<leader>tb', ':TexlabBuild<CR>', opts)
+vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', '<leader>s', function() vim.api.nvim_command('write') end, opts)
 vim.keymap.set('n', '<leader>Q', ':wqa!<CR>', opts)
@@ -329,7 +329,7 @@ require'nvim-treesitter.configs'.setup {
     highlight = { enable = true },
     incremental_selection = { enable = true },
     indent = { enable = true },
-    -- rainbow = { enable = true, extended_mode = true },
+    -- rainbow = { enable = true},
     endwise = { enable = true },
 }
 
