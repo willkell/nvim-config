@@ -2142,8 +2142,8 @@ ZoneBeginN	lua-language-server/script/tracy.lua	/^                ZoneBeginN = f
 ZoneBeginN	lua-language-server/script/tracy.lua	/^        ZoneBeginN = function (info) end,$/;"	f
 ZoneEnd	lua-language-server/script/tracy.lua	/^                ZoneEnd    = function () end,$/;"	f
 ZoneEnd	lua-language-server/script/tracy.lua	/^        ZoneEnd    = function () end,$/;"	f
-["<S-Tab>"]	init.lua	/^        ["<S-Tab>"] = cmp.mapping(function(fallback)$/;"	f
-["<Tab>"]	init.lua	/^        ["<Tab>"] = cmp.mapping(function(fallback)$/;"	f
+['<S-Tab>']	init.lua	/^        ['<S-Tab>'] = cmp.mapping(function(fallback)$/;"	f
+['<Tab>']	init.lua	/^        ['<Tab>'] = cmp.mapping(function(fallback)$/;"	f
 ['binary']	lua-language-server/script/parser/compile.lua	/^    ['binary'] = function (obj)$/;"	f
 ['break']	lua-language-server/script/parser/compile.lua	/^    ['break'] = function (obj)$/;"	f
 ['call']	lua-language-server/script/parser/compile.lua	/^    ['call'] = function (obj)$/;"	f
@@ -3498,6 +3498,8 @@ copy	lua-language-server/meta/3rd/skynet/library/skynet/stm.lua	/^function stm.c
 copy	lua-language-server/meta/template/ffi.lua	/^function ffi.copy(dst, src, len) end$/;"	f	unknown:ffi
 copy	lua-language-server/script/utility.lua	/^    local function copy(a, b)$/;"	f
 copyAttributesTo	lua-language-server/meta/3rd/Cocos4.0/library/cc.PUParticleSystem3D.lua	/^function PUParticleSystem3D:copyAttributesTo (system) end$/;"	f	unknown:PUParticleSystem3D
+copyConfigFile	init.lua	/^local copyConfigFile = function ()$/;"	f
+copyOrEditConfigFile	init.lua	/^local copyOrEditConfigFile = function ()$/;"	f
 copyParticle	lua-language-server/meta/3rd/Cocos4.0/library/cc.ParticleData.lua	/^function ParticleData:copyParticle (p1,p2) end$/;"	f	unknown:ParticleData
 copyProperties	lua-language-server/meta/3rd/Cocos4.0/library/ccui.LayoutParameter.lua	/^function LayoutParameter:copyProperties (model) end$/;"	f	unknown:LayoutParameter
 copyProperties	lua-language-server/meta/3rd/Cocos4.0/library/ccui.LinearLayoutParameter.lua	/^function LinearLayoutParameter:copyProperties (model) end$/;"	f	unknown:LinearLayoutParameter
@@ -3969,6 +3971,8 @@ cube	lua-language-server/meta/3rd/lovr/library/lovr.graphics.lua	/^function lovr
 current_upstream_name	lua-language-server/meta/3rd/OpenResty/library/ngx.upstream.lua	/^function upstream.current_upstream_name() end$/;"	f	unknown:upstream
 cylinder	lua-language-server/meta/3rd/lovr/library/lovr.graphics.lua	/^function lovr.graphics.cylinder(x, y, z, length, angle, ax, ay, az, r1, r2, capped, segments) en/;"	f	unknown:lovr.graphics
 dapend	init.lua	/^function dapend ()$/;"	f
+daprestart	init.lua	/^function daprestart ()$/;"	f
+dapstop	init.lua	/^function dapstop ()$/;"	f
 darkClouds	colors/rakr-light.vim	/^  let darkClouds  = "E8ECED"$/;"	v
 date	lua-language-server/meta/Lua 5.4 en-us utf8/os.lua	/^function os.date(format, time) end$/;"	f	unknown:os
 date	lua-language-server/meta/Lua 5.4 zh-cn utf8/os.lua	/^function os.date(format, time) end$/;"	f	unknown:os
@@ -4307,8 +4311,8 @@ evaluate	lua-language-server/meta/3rd/lovr/library/lovr.math.lua	/^function Curv
 evaluateJS	lua-language-server/meta/3rd/Cocos4.0/library/ccui.WebView.lua	/^function WebView:evaluateJS (js) end$/;"	f	unknown:WebView
 event	lua-language-server/script/config/config.lua	/^function m.event(key, value, oldValue)$/;"	f	unknown:m
 event	lua-language-server/script/filewatch.lua	/^function m.event(callback)$/;"	f	unknown:m
-event_initialized["dapui_config"]	init.lua	/^dap.listeners.after.event_initialized["dapui_config"] = function()$/;"	f	unknown:dap.listeners.after
-event_terminated["dapui_config"]	init.lua	/^dap.listeners.after.event_terminated["dapui_config"] = function()$/;"	f	unknown:dap.listeners.after
+event_initialized['dapui_config']	init.lua	/^dap.listeners.after.event_initialized['dapui_config'] = function()$/;"	f	unknown:dap.listeners.after
+event_terminated['dapui_config']	init.lua	/^dap.listeners.after.event_terminated['dapui_config'] = function()$/;"	f	unknown:dap.listeners.after
 every	lua-language-server/meta/3rd/OpenResty/library/ngx.lua	/^function ngx.timer.every(delay, callback, ...) end$/;"	f	unknown:ngx.timer
 exclude	lua-language-server/script/doctor.lua	/^m.exclude = private(function (...)$/;"	f	unknown:m
 exdata	lua-language-server/meta/3rd/OpenResty/library/thread.exdata.lua	/^local function exdata(data) end$/;"	f

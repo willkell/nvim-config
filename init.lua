@@ -24,7 +24,7 @@ vim.o.incsearch = true
 vim.o.scrolloff = 6
 vim.o.colorcolumn = '80'
 vim.o.signcolumn = 'yes'
-vim.g.mapleader = " "
+vim.g.mapleader = ' '
 vim.o.termguicolors = true
 vim.cmd[[colorscheme vilight]]
 vim.o.mouse = 'a'
@@ -39,7 +39,7 @@ require('packer').startup(function()
     use 'kyazdani42/nvim-web-devicons'
     use 'neovim/nvim-lspconfig'
     use 'mfussenegger/nvim-dap'
-    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+    use { 'rcarriga/nvim-dap-ui', requires = {'mfussenegger/nvim-dap'} }
     use 'tpope/vim-surround'
     use 'tpope/vim-fugitive'
     use 'terrortylor/nvim-comment'
@@ -55,7 +55,7 @@ require('packer').startup(function()
     use 'ludovicchabant/vim-gutentags'
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use 'nvim-telescope/telescope-file-browser.nvim'
-    use { "tami5/sqlite.lua" }
+    use { 'tami5/sqlite.lua' }
     use {'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua'}
     use 'theHamsta/nvim-dap-virtual-text'
     use 'p00f/nvim-ts-rainbow'
@@ -87,26 +87,49 @@ vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
 
 -- LSP Config
 local lspconfig = require 'lspconfig'
-local lsp_installer = require "nvim-lsp-installer"
+local lsp_installer = require 'nvim-lsp-installer'
 
 -- Include the servers you want to have installed by default below
 local servers = {
-    "bashls",
-    "pyright",
-    "clangd",
-    "sumneko_lua",
-    "texlab",
+    'bashls',
+    'pyright',
+    'clangd',
+    'sumneko_lua',
+    'texlab',
 }
 
 for _, name in pairs(servers) do
     local server_is_found, server = lsp_installer.get_server(name)
     if server_is_found then
         if not server:is_installed() then
-            print("Installing " .. name)
+            print('Installing ' .. name)
             server:install()
         end
     end
 end
+local copyConfigFile = function ()
+    local configFile = '/home/wk/.config/nvim/' .. vim.bo.filetype .. '.dapconfig.lua'
+    local dapFile, err = io.open(configFile, 'rb')
+    if err then
+        error(err)
+    end
+    local dapContent = dapFile:read('*a')
+    dapFile.close()
+    local writeFile, err2 = io.open(vim.lsp.buf.list_workspace_folders()[1] .. '/.dapconfig.lua', 'w')
+    if err2 then
+        error(err2)
+    end
+    writeFile:write(dapContent)
+    writeFile:close()
+end
+local copyOrEditConfigFile = function ()
+    local dapFile = io.open(vim.lsp.buf.list_workspace_folders()[1] .. '/.dapconfig.lua', 'rb')
+    if not dapFile then
+        copyConfigFile()
+    end
+    vim.cmd[[execute "e .dapconfig.lua"]]
+end
+
 
 local on_attach = function(_, bufnr)
     --Enable completion triggered by <c-x><c-o>
@@ -129,6 +152,7 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', '[d', vim.lsp.diagnostic.goto_prev, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', ']d', vim.lsp.diagnostic.goto_next, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', '<leader>=', vim.lsp.buf.formatting, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', '<leader>dc', copyOrEditConfigFile, {buffer = bufnr, unpack(opts)})
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -153,7 +177,7 @@ local luasnip = require 'luasnip'
 local cmp = require'cmp'
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
 cmp.setup({
@@ -173,7 +197,7 @@ cmp.setup({
             c = cmp.mapping.close(),
         }),
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        ["<Tab>"] = cmp.mapping(function(fallback)
+        ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
@@ -183,9 +207,9 @@ cmp.setup({
             else
                 fallback()
             end
-        end, { "i", "s" }),
+        end, { 'i', 's' }),
 
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
@@ -193,7 +217,7 @@ cmp.setup({
             else
                 fallback()
             end
-        end, { "i", "s" }),
+        end, { 'i', 's' }),
     },
     sources = cmp.config.sources {
     { name = 'nvim_lsp' },
@@ -209,8 +233,8 @@ cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex =
 
 
 local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
 require'lspconfig'.sumneko_lua.setup {
     on_attach = on_attach(_, 0),
     capabilities = capabilities,
@@ -229,7 +253,7 @@ require'lspconfig'.sumneko_lua.setup {
             workspace = {
                 -- Make the server aware of Neovim runtime files
                 checkThirdParty = false,
-                library = vim.api.nvim_get_runtime_file("", true),
+                library = vim.api.nvim_get_runtime_file('', true),
                 preloadFileSize = 2000000
             },
             telemetry = {
@@ -240,7 +264,7 @@ require'lspconfig'.sumneko_lua.setup {
 }
 
 -- LuaSnip
-require("luasnip.loaders.from_vscode").load()
+require('luasnip.loaders.from_vscode').load()
 -- nvim comment
 require('nvim_comment').setup()
 
@@ -255,6 +279,8 @@ dap.adapters.cppdbg = {
 --  dap keymaps
 local dapui = require 'dapui'
 local dapend = nil
+local daprestart = nil
+local dapstop = nil
 local dapmaps = {
 {'n', '<C-c>', function() dap.continue() end, opts},
 {'n', '<C-s>', function() dap.step_over() end, opts},
@@ -263,6 +289,8 @@ local dapmaps = {
 {'n', '<C-v>', function() dap.run_to_cursor() end, opts},
 {'n', '<C-o>', function() dap.repl.toggle() end, opts},
 {'n', '<C-x>', function() dapend() end, opts},
+{'n', '<C-r>', function() daprestart() end, opts},
+{'n', '<C-t>', function() dapstop() end, opts},
 }
 
 function dapend ()
@@ -272,6 +300,17 @@ function dapend ()
         vim.keymap.del(map[1], map[2])
     end
     vim.cmd(':bd! */bin/sh')
+end
+
+function daprestart ()
+    dap.terminate()
+    dap.run_last()
+end
+function dapstop ()
+    dap.terminate()
+    for _, map in ipairs(dapmaps) do
+        vim.keymap.del(map[1], map[2])
+    end
 end
 vim.keymap.set('n', '<leader>dd', dap.continue, opts)
 vim.keymap.set('n', '<leader>dl', dap.run_last, opts)
@@ -284,13 +323,13 @@ vim.keymap.set('n', '<leader>dbp', function() dap.set_breakpoint(nil, nil, vim.f
 -- ui
 dapui.setup()
 
-dap.listeners.after.event_initialized["dapui_config"] = function()
+dap.listeners.after.event_initialized['dapui_config'] = function()
     dapui.open()
     for _, map in ipairs(dapmaps) do
         vim.keymap.set(map[1], map[2], map[3], map[4])
     end
 end
-dap.listeners.after.event_terminated["dapui_config"] = function()
+dap.listeners.after.event_terminated['dapui_config'] = function()
     dapui.close()
     for _, map in ipairs(dapmaps) do
         vim.keymap.del(map[1], map[2])
@@ -303,8 +342,8 @@ vim.keymap.set('n', '<leader>tt', ':ToggleTerm<CR>', opts)
 -- local configs
 require('config-local').setup {
     -- Default configuration (optional)
-    config_files = { ".vimrc.lua", ".vimrc" },  -- Config file patterns to load (lua supported)
-    hashfile = vim.fn.stdpath("data") .. "/config-local", -- Where the plugin keeps files data
+    config_files = { '.vimrc.lua', '.vimrc', '.dapconfig.lua' },  -- Config file patterns to load (lua supported)
+    hashfile = vim.fn.stdpath('data') .. '/config-local', -- Where the plugin keeps files data
     autocommands_create = true,                 -- Create autocommands (VimEnter, DirectoryChanged)
     commands_create = true,                     -- Create commands (ConfigSource, ConfigEdit, ConfigTrust, ConfigIgnore)
     silent = true,                             -- Disable plugin messages (Config loaded/ignored)
