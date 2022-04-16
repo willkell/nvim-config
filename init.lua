@@ -62,6 +62,7 @@ require('packer').startup(function()
     use 'RRethy/nvim-treesitter-endwise'
     use 'windwp/nvim-autopairs'
     use 'nvim-lualine/lualine.nvim'
+    use 'github/copilot.vim'
 end)
 
 --util keymaps
