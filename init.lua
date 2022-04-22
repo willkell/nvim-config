@@ -46,6 +46,8 @@ require('packer').startup(function()
     use 'mbbill/undotree'
     use 'williamboman/nvim-lsp-installer'
     use 'hrsh7th/nvim-cmp'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'saadparwaiz1/cmp_luasnip'
     use 'L3MON4D3/LuaSnip'
@@ -100,7 +102,7 @@ local servers = {
 }
 
 for _, name in pairs(servers) do
-    local server_is_found, server = lsp_installer.get_server(name)
+     local server_is_found, server = lsp_installer.get_server(name)
     if server_is_found then
         if not server:is_installed() then
             print('Installing ' .. name)
@@ -197,7 +199,7 @@ cmp.setup({
             i = cmp.mapping.abort(),
             c = cmp.mapping.close(),
         }),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
@@ -394,3 +396,9 @@ vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
 
 -- lualine
 require'lualine'.setup()
+
+
+-- copilot
+vim.cmd[[imap <silent><script><expr> <leader>c copilot#Accept("\<CR>")]]
+vim.cmd[[let g:copilot_no_tab_map = v:true]]
+
