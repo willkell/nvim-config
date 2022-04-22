@@ -57,7 +57,6 @@ require('packer').startup(function()
     use 'akinsho/toggleterm.nvim'
     use 'ludovicchabant/vim-gutentags'
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use 'nvim-telescope/telescope-file-browser.nvim'
     use { 'tami5/sqlite.lua' }
     use {'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua'}
     use 'theHamsta/nvim-dap-virtual-text'
@@ -69,6 +68,8 @@ require('packer').startup(function()
     use 'rrethy/nvim-base16'
     use 'neomake/neomake'
     use 'goolord/alpha-nvim'
+    use 'shatur/neovim-session-manager'
+    use 'kyazdani42/nvim-tree.lua'
 end)
 
 --impatient
@@ -79,12 +80,12 @@ vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
 vim.keymap.set({'n', 'v'}, 'k', 'gk', opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Down>',function () vim.api.nvim_command('normal gj') end, opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Up>', function () vim.api.nvim_command('normal gk') end, opts)
-vim.keymap.set('n', '<leader>cl', ':w ~/.config/nvim/init.lua<CR>:so ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>cl', ':so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>pi', ':w ~/.config/nvim/init.lua<CR>:so~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
-vim.keymap.set('n', '<leader>ps', ':w ~/.config/nvim/init.lua<CR>:so~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
+vim.keymap.set('n', '<leader>pi', ':so~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
+vim.keymap.set('n', '<leader>ps', ':so~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
 vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
@@ -369,7 +370,7 @@ vim.keymap.set('n', '<leader>ff', tel_built.find_files, opts)
 vim.keymap.set('n', '<leader>fg', tel_built.live_grep, opts)
 vim.keymap.set('n', '<leader>fb', tel_built.buffers, opts)
 vim.keymap.set('n', '<leader>fh', tel_built.help_tags, opts)
-vim.keymap.set('n', '<leader>fb', telescope.extensions.file_browser.file_browser, opts)
+vim.keymap.set('n', '<leader>fr', telescope.extensions.frecency.frecency, opts)
 
 -- treesitter
 require'nvim-treesitter.configs'.setup {
@@ -466,4 +467,24 @@ end, opts)
 vim.cmd('call neomake#configure#automake(\'w\')')
 
 --alpha-nvim
-require'alpha'.setup(require'alpha.themes.dashboard'.config)
+local alpha = require'alpha'
+local dashboard = require("alpha.themes.dashboard")
+dashboard.section.buttons.val = {
+    dashboard.button("e", "   New file" , ":enew <CR>"),
+    dashboard.button("SPC l s", "   Open last session"),
+    dashboard.button("SPC f f", "   Find file"),
+    dashboard.button("SPC f r", "   Recent files"),
+    dashboard.button("SPC e n", "   Edit Config"),
+    dashboard.button("SPC f h", "   Help"),
+    dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
+}
+alpha.setup(dashboard.config)
+--session manager
+require('session_manager').setup({
+  autoload_mode = require('session_manager.config').AutoloadMode.Disabled,
+})
+vim.keymap.set('n', '<leader>ls', ':SessionManager load_last_session<CR>', opts)
+
+-- file explorer
+require'nvim-tree'.setup()
+vim.keymap.set('n', '<leader>ft', ':NvimTreeToggle<CR>', opts)
