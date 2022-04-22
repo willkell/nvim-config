@@ -74,15 +74,30 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["cmp-buffer"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/cmp-buffer",
+    url = "https://github.com/hrsh7th/cmp-buffer"
+  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
+  ["cmp-path"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/cmp-path",
+    url = "https://github.com/hrsh7th/cmp-path"
+  },
   cmp_luasnip = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
+  },
+  ["comment.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/comment.nvim",
+    url = "https://github.com/numToStr/comment.nvim"
   },
   ["copilot.vim"] = {
     loaded = true,
@@ -104,15 +119,15 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
     url = "https://github.com/windwp/nvim-autopairs"
   },
+  ["nvim-base16"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/nvim-base16",
+    url = "https://github.com/rrethy/nvim-base16"
+  },
   ["nvim-cmp"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/nvim-cmp",
     url = "https://github.com/hrsh7th/nvim-cmp"
-  },
-  ["nvim-comment"] = {
-    loaded = true,
-    path = "/home/wk/.local/share/nvim/site/pack/packer/start/nvim-comment",
-    url = "https://github.com/terrortylor/nvim-comment"
   },
   ["nvim-config-local"] = {
     loaded = true,

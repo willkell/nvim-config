@@ -26,7 +26,7 @@ vim.o.colorcolumn = '80'
 vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 vim.o.termguicolors = true
-vim.cmd[[colorscheme vilight]]
+vim.cmd[[colorscheme base16-twilight]]
 vim.o.mouse = 'a'
 
 local use = require('packer').use
@@ -42,7 +42,7 @@ require('packer').startup(function()
     use { 'rcarriga/nvim-dap-ui', requires = {'mfussenegger/nvim-dap'} }
     use 'tpope/vim-surround'
     use 'tpope/vim-fugitive'
-    use 'terrortylor/nvim-comment'
+    use 'numToStr/comment.nvim'
     use 'mbbill/undotree'
     use 'williamboman/nvim-lsp-installer'
     use 'hrsh7th/nvim-cmp'
@@ -65,6 +65,7 @@ require('packer').startup(function()
     use 'windwp/nvim-autopairs'
     use 'nvim-lualine/lualine.nvim'
     use 'github/copilot.vim'
+    use 'rrethy/nvim-base16'
 end)
 
 --util keymaps
@@ -143,7 +144,7 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {buffer = bufnr, unpack(opts)})
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, {buffer = bufnr, unpack(opts)})
+    vim.keymap.set('n', 'J', vim.lsp.buf.signature_help, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, {buffer = bufnr, unpack(opts)})
     vim.keymap.set('n', '<leader>wl', vim.inspect(vim.lsp.buf.list_workspace_folders()), {buffer = bufnr, unpack(opts)})
@@ -269,7 +270,7 @@ require'lspconfig'.sumneko_lua.setup {
 -- LuaSnip
 require('luasnip.loaders.from_vscode').load()
 -- nvim comment
-require('nvim_comment').setup()
+require('Comment').setup()
 
 -- dap
 local dap = require('dap')
@@ -322,7 +323,6 @@ vim.keymap.set('n', '<leader>dbc', function() dap.set_breakpoint(vim.fn.input('B
 vim.keymap.set('n', '<leader>dbp', function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, opts)
 
 
-
 -- ui
 dapui.setup()
 
@@ -365,13 +365,21 @@ vim.keymap.set('n', '<leader>fg', tel_built.live_grep, opts)
 vim.keymap.set('n', '<leader>fb', tel_built.buffers, opts)
 vim.keymap.set('n', '<leader>fh', tel_built.help_tags, opts)
 vim.keymap.set('n', '<leader>fb', telescope.extensions.file_browser.file_browser, opts)
+vim.keymap.set('n', '<leader>fc', tel_built.colorscheme, opts)
 
 -- treesitter
 require'nvim-treesitter.configs'.setup {
     highlight = { enable = true },
     incremental_selection = { enable = true },
     indent = { enable = true },
-    -- rainbow = { enable = true},
+    rainbow = { enable = true, extended_mode = true,
+                colors = {
+                '#cda869',
+                '9b703f',
+                '#838184',
+                '#c3c3c3',
+            },
+    },
     endwise = { enable = true },
 }
 
@@ -389,7 +397,7 @@ npairs.setup({
 
 
 -- fugitive
-vim.keymap.set('n', '<leader>gg', ':Git<CR>', opts)
+vim.keymap.set('n', 'leadergg', ':GitCR', opts)
 vim.keymap.set('n', '<leader>ga', ':Git add *<CR>', opts)
 vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', opts)
 vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
@@ -399,6 +407,6 @@ require'lualine'.setup()
 
 
 -- copilot
-vim.cmd[[imap <silent><script><expr> <leader>c copilot#Accept("\<CR>")]]
+vim.cmd[[imap <silent><script><expr> <C-c> copilot#Accept("\<CR>")]]
 vim.cmd[[let g:copilot_no_tab_map = v:true]]
 
