@@ -26,7 +26,6 @@ vim.o.colorcolumn = '80'
 vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 vim.o.termguicolors = true
-vim.cmd[[colorscheme base16-twilight]]
 vim.o.mouse = 'a'
 
 local use = require('packer').use
@@ -420,15 +419,8 @@ local function set_colorscheme(name)
     vim.cmd('colorscheme '..name)
     -- execute `kitty @ set-colors -c <color>` to change terminal window's
     -- colors and newly created terminal windows colors
-    vim.loop.spawn('kitty', {
-        args = {
-            '@',
-            'set-colors',
-            '-c',
-            string.format(vim.env.HOME..'/base16-kitty/colors/%s.conf', name)
-        }
-    }, nil)
-end
+    os.execute('ln -sf ~/.config/kitty/colors/colors/' .. name .. '.conf ~/.config/kitty/theme.conf')
+    end
 
 set_colorscheme(vim.fn.readfile(base16_theme_fname)[1])
 local telescope_actions = require 'telescope.actions'
