@@ -30,6 +30,7 @@ vim.o.mouse = 'a'
 
 local use = require('packer').use
 require('packer').startup(function()
+    use 'lewis6991/impatient.nvim'
     use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use {'nvim-telescope/telescope.nvim',
@@ -65,8 +66,13 @@ require('packer').startup(function()
     use 'nvim-lualine/lualine.nvim'
     use 'github/copilot.vim'
     use 'rrethy/nvim-base16'
+    use 'neomake/neomake'
+    use 'goolord/alpha-nvim'
 end)
 
+--impatient
+require'impatient'
+require'impatient'.enable_profile()
 --util keymaps
 local opts = {silent = true, remap = false}
 vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
@@ -77,8 +83,8 @@ vim.keymap.set('n', '<leader>cl', ':so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
-vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
+vim.keymap.set('n', '<leader>pi', ':w<CR>:so~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
+vim.keymap.set('n', '<leader>ps', ':w<CR>:so~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
 vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
@@ -455,3 +461,9 @@ vim.keymap.set('n', '<leader>fc', function()
         end
     }):find()
 end, opts)
+
+-- neomake
+vim.cmd('call neomake#configure#automake(\'w\')')
+
+--alpha-nvim
+require'alpha'.setup(require'alpha.themes.dashboard'.config)
