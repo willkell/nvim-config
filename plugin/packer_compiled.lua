@@ -74,6 +74,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["alpha-nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/alpha-nvim",
+    url = "https://github.com/goolord/alpha-nvim"
+  },
   ["cmp-buffer"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/cmp-buffer",
@@ -110,7 +115,6 @@ _G.packer_plugins = {
     url = "https://github.com/rafamadriz/friendly-snippets"
   },
   ["impatient.nvim"] = {
-    config = { "require('impatient')" },
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/impatient.nvim",
     url = "https://github.com/lewis6991/impatient.nvim"
@@ -124,6 +128,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/neomake",
     url = "https://github.com/neomake/neomake"
+  },
+  ["neovim-session-manager"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/neovim-session-manager",
+    url = "https://github.com/shatur/neovim-session-manager"
   },
   ["nvim-autopairs"] = {
     loaded = true,
@@ -253,10 +262,6 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: impatient.nvim
-time([[Config for impatient.nvim]], true)
-require('impatient')
-time([[Config for impatient.nvim]], false)
 if should_profile then save_profiles() end
 
 end)

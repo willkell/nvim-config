@@ -1,3 +1,4 @@
+require'impatient'
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
@@ -71,7 +72,6 @@ require('packer').startup(function()
 end)
 
 --impatient
-require'impatient'
 require'impatient'.enable_profile()
 --util keymaps
 local opts = {silent = true, remap = false}
@@ -79,12 +79,12 @@ vim.keymap.set({'n', 'v'}, 'j', 'gj', opts)
 vim.keymap.set({'n', 'v'}, 'k', 'gk', opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Down>',function () vim.api.nvim_command('normal gj') end, opts)
 vim.keymap.set({'n', 'v', 'i'}, '<Up>', function () vim.api.nvim_command('normal gk') end, opts)
-vim.keymap.set('n', '<leader>cl', ':so ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>cl', ':w ~/.config/nvim/init.lua<CR>:so ~/.config/nvim/init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>pi', ':w<CR>:so~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
-vim.keymap.set('n', '<leader>ps', ':w<CR>:so~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
+vim.keymap.set('n', '<leader>pi', ':w ~/.config/nvim/init.lua<CR>:so~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
+vim.keymap.set('n', '<leader>ps', ':w ~/.config/nvim/init.lua<CR>:so~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
 vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
