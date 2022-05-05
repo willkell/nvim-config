@@ -134,6 +134,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/neovim-session-manager",
     url = "https://github.com/shatur/neovim-session-manager"
   },
+  ["neuron.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/neuron.nvim",
+    url = "https://github.com/oberblastmeister/neuron.nvim"
+  },
   ["nvim-autopairs"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
@@ -213,6 +218,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
+  },
+  ["popup.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/popup.nvim",
+    url = "https://github.com/nvim-lua/popup.nvim"
   },
   ["sqlite.lua"] = {
     loaded = true,

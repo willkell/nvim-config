@@ -70,6 +70,8 @@ require('packer').startup(function()
     use 'goolord/alpha-nvim'
     use 'shatur/neovim-session-manager'
     use 'kyazdani42/nvim-tree.lua'
+    use 'nvim-lua/popup.nvim'
+    use {  'oberblastmeister/neuron.nvim', branch = 'unstable'}
 end)
 
 --impatient
@@ -125,7 +127,7 @@ local copyConfigFile = function ()
     end
     local dapContent = dapFile:read('*a')
     dapFile.close()
-    local writeFile, err2 = io.open(vim.lsp.buf.list_workspace_folders()[1] .. '/.dapconfig.lua', 'w')
+    local writeFile, err2 = io.open(vim.fn.getcwd() .. '/.dapconfig.lua', 'w')
     if err2 then
         error(err2)
     end
@@ -133,7 +135,7 @@ local copyConfigFile = function ()
     writeFile:close()
 end
 local copyOrEditConfigFile = function ()
-    local dapFile = io.open(vim.lsp.buf.list_workspace_folders()[1] .. '/.dapconfig.lua', 'rb')
+    local dapFile = io.open(vim.fn.getcwd() .. '/.dapconfig.lua', 'rb')
     if not dapFile then
         copyConfigFile()
     end
@@ -284,6 +286,11 @@ dap.adapters.cppdbg = {
     id = 'cppdbg',
     type = 'executable',
     command = '/home/wk/.vscode/extensions/ms-vscode.cpptools-1.8.4/debugAdapters/bin/OpenDebugAD7',
+}
+dap.adapters.python = {
+  type = 'executable';
+  command = '/usr/bin/python';
+  args = { '-m', 'debugpy.adapter' };
 }
 
 --  dap keymaps
@@ -488,3 +495,12 @@ vim.keymap.set('n', '<leader>ls', ':SessionManager load_last_session<CR>', opts)
 -- file explorer
 require'nvim-tree'.setup()
 vim.keymap.set('n', '<leader>ft', ':NvimTreeToggle<CR>', opts)
+
+-- neuron
+require'neuron'.setup {
+    virtual_titles = true,
+    mappings = true,
+    run = nil, -- function to run when in neuron dir
+    neuron_dir = "/home/wk/neuron", -- the directory of all of your notes, expanded by default (currently supports only one directory for notes, find a way to detect neuron.dhall to use any directory)
+    leader = "gz", -- the leader key to for all mappings, remember with 'go zettel'
+}
