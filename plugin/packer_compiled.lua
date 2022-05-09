@@ -69,6 +69,11 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["BetterLua.vim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/BetterLua.vim",
+    url = "https://github.com/euclidianAce/BetterLua.vim"
+  },
   LuaSnip = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/LuaSnip",
@@ -134,10 +139,10 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/neovim-session-manager",
     url = "https://github.com/shatur/neovim-session-manager"
   },
-  ["neuron.nvim"] = {
+  ["nlua.nvim"] = {
     loaded = true,
-    path = "/home/wk/.local/share/nvim/site/pack/packer/start/neuron.nvim",
-    url = "https://github.com/oberblastmeister/neuron.nvim"
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/nlua.nvim",
+    url = "https://github.com/tjdevries/nlua.nvim"
   },
   ["nvim-autopairs"] = {
     loaded = true,
@@ -224,6 +229,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/popup.nvim",
     url = "https://github.com/nvim-lua/popup.nvim"
   },
+  ["refactoring.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/refactoring.nvim",
+    url = "https://github.com/ThePrimeagen/refactoring.nvim"
+  },
   ["sqlite.lua"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/sqlite.lua",
@@ -248,6 +258,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/toggleterm.nvim",
     url = "https://github.com/akinsho/toggleterm.nvim"
+  },
+  ["trouble.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/trouble.nvim",
+    url = "https://github.com/folke/trouble.nvim"
   },
   undotree = {
     loaded = true,
