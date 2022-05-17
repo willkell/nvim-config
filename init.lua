@@ -28,6 +28,7 @@ vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 vim.o.termguicolors = true
 vim.o.mouse = 'a'
+vim.o.laststatus = 3
 
 local use = require('packer').use
 require('packer').startup(function()
@@ -130,7 +131,7 @@ for _, name in pairs(servers) do
 	end
 end
 local copyConfigFile = function()
-	local configFile = '/home/wk/.config/nvim/' .. vim.bo.filetype .. '.dapconfig.lua'
+	local configFile = '/home/wk/.config/nvim/dapconfigs/' .. vim.bo.filetype .. '.dapconfig.lua'
 	local dapFile, err = io.open(configFile, 'rb')
 	if err then
 		error(err)
@@ -270,7 +271,7 @@ require('lspconfig').sumneko_lua.setup {
 			},
 			diagnostics = {
 				-- Get the language server to recognize the `vim` global
-				globals = { 'vim' },
+				globals = { 'vim', 'awesome', 'client', 'root' },
 			},
 			workspace = {
 				-- Make the server aware of Neovim runtime files
@@ -598,9 +599,8 @@ vim.keymap.set('n', '<leader>xd', ':Trouble document_diagnostics<cr>', opts)
 vim.keymap.set('n', '<leader>xl', ':Trouble loclist<cr>', opts)
 vim.keymap.set('n', '<leader>xq', ':Trouble quickfix<cr>', opts)
 vim.keymap.set('n', 'gR', ':Trouble lsp_references<cr>', opts)
--- neorg
-require('neorg').setup()
 
+-- neorg
 -- null-ls
 local null_ls = require 'null-ls'
 local sources = {
@@ -609,8 +609,15 @@ local sources = {
 	},
 	null_ls.builtins.formatting.black,
 	null_ls.builtins.formatting.clang_format.with {
-        extra_args = { '--style={BasedOnStyle: LLVM, IndentWidth = 4}' },
+		extra_args = { '--style', '{BasedOnStyle: LLVM, IndentWidth = 4}' },
+	},
+	null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.luacheck.with {
+        extra_args = { '--globals', 'vim'}
     },
-    null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.pylama,
+    null_ls.builtins.formatting.isort.with {
+        extra_args = { '--profile', 'black'}
+    },
 }
 null_ls.setup { sources = sources }

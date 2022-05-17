@@ -124,6 +124,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/impatient.nvim",
     url = "https://github.com/lewis6991/impatient.nvim"
   },
+  ["indent-blankline.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
+    url = "https://github.com/lukas-reineke/indent-blankline.nvim"
+  },
   ["lualine.nvim"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/lualine.nvim",
@@ -134,6 +139,11 @@ _G.packer_plugins = {
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/neomake",
     url = "https://github.com/neomake/neomake"
   },
+  neorg = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/neorg",
+    url = "https://github.com/nvim-neorg/neorg"
+  },
   ["neovim-session-manager"] = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/neovim-session-manager",
@@ -143,6 +153,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/nlua.nvim",
     url = "https://github.com/tjdevries/nlua.nvim"
+  },
+  ["null-ls.nvim"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/null-ls.nvim",
+    url = "https://github.com/jose-elias-alvarez/null-ls.nvim"
   },
   ["nvim-autopairs"] = {
     loaded = true,
@@ -278,6 +293,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/wk/.local/share/nvim/site/pack/packer/start/vim-gutentags",
     url = "https://github.com/ludovicchabant/vim-gutentags"
+  },
+  ["vim-repeat"] = {
+    loaded = true,
+    path = "/home/wk/.local/share/nvim/site/pack/packer/start/vim-repeat",
+    url = "https://github.com/tpope/vim-repeat"
   },
   ["vim-surround"] = {
     loaded = true,
