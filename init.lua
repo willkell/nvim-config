@@ -33,6 +33,8 @@ vim.o.laststatus = 3
 local use = require('packer').use
 require('packer').startup(function()
     use 'lewis6991/impatient.nvim'
+    use "williamboman/mason-lspconfig.nvim"
+    use "williamboman/mason.nvim"
     use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
@@ -45,7 +47,6 @@ require('packer').startup(function()
     use 'tpope/vim-fugitive'
     use 'numToStr/comment.nvim'
     use 'mbbill/undotree'
-    use 'williamboman/nvim-lsp-installer'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-buffer'
@@ -109,8 +110,6 @@ vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
 
 -- LSP Config
 local lspconfig = require 'lspconfig'
-local lsp_installer = require 'nvim-lsp-installer'
-
 -- Include the servers you want to have installed by default below
 local servers = {
     'bashls',
@@ -120,16 +119,52 @@ local servers = {
     'texlab',
     'rust_analyzer',
 }
+local pid = vim.fn.getpid()
 
-for _, name in pairs(servers) do
-    local server_is_found, server = lsp_installer.get_server(name)
-    if server_is_found then
-        if not server:is_installed() then
-            print('Installing ' .. name)
-            server:install()
-        end
-    end
-end
+-- local omnisharp_bin = "/usr/lib/omnisharp-roslyn/OmniSharp"
+local omnisharp_bin = "omnisharp"
+
+-- cmd = { "/path/to/omnisharp-roslyn/bin/omnisharp/run", "--languageserver" , "--hostPID", tostring(pid) },
+
+-- require'lspconfig'.omnisharp.setup {
+--     cmd = {"/usr/bin/omnisharp" },
+--
+--     -- Enables support for reading code style, naming convention and analyzer
+--     -- settings from .editorconfig.
+--     enable_editorconfig_support = true,
+--
+--     -- If true, MSBuild project system will only load projects for files that
+--     -- were opened in the editor. This setting is useful for big C# codebases
+--     -- and allows for faster initialization of code navigation features only
+--     -- for projects that are relevant to code that is being edited. With this
+--     -- setting enabled OmniSharp may load fewer projects and may thus display
+--     -- incomplete reference lists for symbols.
+--     enable_ms_build_load_projects_on_demand = false,
+--
+--     -- Enables support for roslyn analyzers, code fixes and rulesets.
+--     enable_roslyn_analyzers = false,
+--
+--     -- Specifies whether 'using' directives should be grouped and sorted during
+--     -- document formatting.
+--     organize_imports_on_format = false,
+--
+--     -- Enables support for showing unimported types and unimported extension
+--     -- methods in completion lists. When committed, the appropriate using
+--     -- directive will be added at the top of the current file. This option can
+--     -- have a negative impact on initial completion responsiveness,
+--     -- particularly for the first few completion sessions after opening a
+--     -- solution.
+--     enable_import_completion = false,
+--
+--     -- Specifies whether to include preview versions of the .NET SDK when
+--     -- determining which version to use for project loading.
+--     sdk_include_prereleases = true,
+--
+--     -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+--     -- true
+--     analyze_open_documents_only = false,
+-- }
+
 local copyConfigFile = function()
     local configFile = '/home/wk/.config/nvim/dapconfigs/' .. vim.bo.filetype .. '.dapconfig.lua'
     local dapFile, err = io.open(configFile, 'rb')
@@ -220,6 +255,13 @@ for _, lsp in ipairs(servers) do
     }
 end
 
+require 'lspconfig'.omnisharp.setup {
+    cmd = { "dotnet", "/usr/lib/omnisharp-roslyn/OmniSharp.dll" },
+    root_dir = lspconfig.util.root_pattern("*.csproj","*.sln");
+    on_attach = on_attach(),
+    capabilities = capabilities,
+    -- Additional configuration can be added here
+}
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -638,7 +680,9 @@ local sources = {
     null_ls.builtins.formatting.clang_format.with {
         extra_args = { '--style', '{BasedOnStyle: LLVM, IndentWidth = 4}' },
     },
-    null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.cppcheck.with {
+        extra_args = { '--std=c++17', '--language=c++' }
+    },
     null_ls.builtins.diagnostics.luacheck.with {
         extra_args = { '--globals', 'vim' },
     },
@@ -649,3 +693,5 @@ local sources = {
     null_ls.builtins.formatting.rustfmt,
 }
 null_ls.setup { sources = sources }
+require("mason").setup()
+require("mason-lspconfig").setup()
