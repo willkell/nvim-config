@@ -19,7 +19,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.swapfile = false
 vim.o.backup = false
-vim.o.undodir = '~/.config/nvim/undodir'
+vim.o.undodir = '/home/wk/.config/nvim/undodir'
 vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.scrolloff = 6
@@ -79,6 +79,8 @@ require('packer').startup(function()
     use 'lukas-reineke/indent-blankline.nvim'
     use 'jose-elias-alvarez/null-ls.nvim'
     use 'tpope/vim-repeat'
+    use 'mfussenegger/nvim-jdtls'
+    use 'JuliaEditorSupport/julia-vim'
 end)
 
 --impatient
@@ -107,6 +109,11 @@ vim.keymap.set('n', '<leader>s', function()
 end, opts)
 vim.keymap.set('n', '<leader>Q', ':wqa!<CR>', opts)
 vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
+-- move windows
+vim.keymap.set('n', '<leader>wh', '<c-w>h', opts)
+vim.keymap.set('n', '<leader>wj', '<c-w>j', opts)
+vim.keymap.set('n', '<leader>wk', '<c-w>k', opts)
+vim.keymap.set('n', '<leader>wl', '<c-w>l', opts)
 
 -- LSP Config
 local lspconfig = require 'lspconfig'
@@ -115,55 +122,16 @@ local servers = {
     'bashls',
     'pyright',
     'clangd',
-    'sumneko_lua',
+    'lua_ls',
     'texlab',
     'rust_analyzer',
+    -- 'sqls',
+    'sqlls',
+    -- 'jdtls',
+    'julials',
+    'tsserver',
 }
-local pid = vim.fn.getpid()
 
--- local omnisharp_bin = "/usr/lib/omnisharp-roslyn/OmniSharp"
-local omnisharp_bin = "omnisharp"
-
--- cmd = { "/path/to/omnisharp-roslyn/bin/omnisharp/run", "--languageserver" , "--hostPID", tostring(pid) },
-
--- require'lspconfig'.omnisharp.setup {
---     cmd = {"/usr/bin/omnisharp" },
---
---     -- Enables support for reading code style, naming convention and analyzer
---     -- settings from .editorconfig.
---     enable_editorconfig_support = true,
---
---     -- If true, MSBuild project system will only load projects for files that
---     -- were opened in the editor. This setting is useful for big C# codebases
---     -- and allows for faster initialization of code navigation features only
---     -- for projects that are relevant to code that is being edited. With this
---     -- setting enabled OmniSharp may load fewer projects and may thus display
---     -- incomplete reference lists for symbols.
---     enable_ms_build_load_projects_on_demand = false,
---
---     -- Enables support for roslyn analyzers, code fixes and rulesets.
---     enable_roslyn_analyzers = false,
---
---     -- Specifies whether 'using' directives should be grouped and sorted during
---     -- document formatting.
---     organize_imports_on_format = false,
---
---     -- Enables support for showing unimported types and unimported extension
---     -- methods in completion lists. When committed, the appropriate using
---     -- directive will be added at the top of the current file. This option can
---     -- have a negative impact on initial completion responsiveness,
---     -- particularly for the first few completion sessions after opening a
---     -- solution.
---     enable_import_completion = false,
---
---     -- Specifies whether to include preview versions of the .NET SDK when
---     -- determining which version to use for project loading.
---     sdk_include_prereleases = true,
---
---     -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
---     -- true
---     analyze_open_documents_only = false,
--- }
 
 local copyConfigFile = function()
     local configFile = '/home/wk/.config/nvim/dapconfigs/' .. vim.bo.filetype .. '.dapconfig.lua'
@@ -329,7 +297,7 @@ cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
-require('lspconfig').sumneko_lua.setup {
+require('lspconfig').lua_ls.setup {
     on_attach = on_attach(),
     capabilities = capabilities,
     settings = {
@@ -427,7 +395,7 @@ local dapmaps = {
         function()
             dap.repl.toggle()
         end,
-        opts,
+ 	      opts,
     },
     {
         'n',
@@ -443,7 +411,7 @@ local dapmaps = {
         function()
             daprestart()
         end,
-        opts,
+       opts,
     },
     {
         'n',
@@ -695,3 +663,4 @@ local sources = {
 null_ls.setup { sources = sources }
 require("mason").setup()
 require("mason-lspconfig").setup()
+require'lspconfig'.sqlls.setup{}
