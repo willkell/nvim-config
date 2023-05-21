@@ -81,6 +81,7 @@ require('packer').startup(function()
     use 'tpope/vim-repeat'
     use 'mfussenegger/nvim-jdtls'
     use 'JuliaEditorSupport/julia-vim'
+    use ''
 end)
 
 --impatient
@@ -225,7 +226,7 @@ end
 
 require 'lspconfig'.omnisharp.setup {
     cmd = { "dotnet", "/usr/lib/omnisharp-roslyn/OmniSharp.dll" },
-    root_dir = lspconfig.util.root_pattern("*.csproj","*.sln");
+    root_dir = lspconfig.util.root_pattern("*.csproj", "*.sln"),
     on_attach = on_attach(),
     capabilities = capabilities,
     -- Additional configuration can be added here
@@ -395,7 +396,7 @@ local dapmaps = {
         function()
             dap.repl.toggle()
         end,
- 	      opts,
+        opts,
     },
     {
         'n',
@@ -411,7 +412,7 @@ local dapmaps = {
         function()
             daprestart()
         end,
-       opts,
+        opts,
     },
     {
         'n',
@@ -477,10 +478,10 @@ vim.keymap.set('n', '<leader>tt', ':ToggleTerm<CR>', opts)
 require('config-local').setup {
     -- Default configuration (optional)
     config_files = { '.vimrc.lua', '.vimrc', '.dapconfig.lua' }, -- Config file patterns to load (lua supported)
-    hashfile = vim.fn.stdpath 'data' .. '/config-local', -- Where the plugin keeps files data
-    autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
-    commands_create = true, -- Create commands (ConfigSource, ConfigEdit, ConfigTrust, ConfigIgnore)
-    silent = true, -- Disable plugin messages (Config loaded/ignored)
+    hashfile = vim.fn.stdpath 'data' .. '/config-local',         -- Where the plugin keeps files data
+    autocommands_create = true,                                  -- Create autocommands (VimEnter, DirectoryChanged)
+    commands_create = true,                                      -- Create commands (ConfigSource, ConfigEdit, ConfigTrust, ConfigIgnore)
+    silent = true,                                               -- Disable plugin messages (Config loaded/ignored)
 }
 
 -- telescope
@@ -535,7 +536,19 @@ vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', opts)
 vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
 
 -- lualine
-require('lualine').setup()
+require('lualine').setup {
+    sections = {
+        lualine_c = {
+            {
+                'filename',
+                file_status = true,
+                path = 3,
+            }
+        },
+        lualine_x = { 'ctime', 'filetype' },
+    },
+
+}
 
 -- function to update colorscheme with kitty too
 -- this is our single source of truth created above
@@ -663,4 +676,4 @@ local sources = {
 null_ls.setup { sources = sources }
 require("mason").setup()
 require("mason-lspconfig").setup()
-require'lspconfig'.sqlls.setup{}
+require 'lspconfig'.sqlls.setup {}
