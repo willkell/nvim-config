@@ -75,7 +75,7 @@ require('packer').startup(function()
     use 'euclidianAce/BetterLua.vim'
     use 'ThePrimeagen/refactoring.nvim'
     use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
-    use 'nvim-neorg/neorg'
+    use { 'nvim-neorg/neorg', run = ":Neorg sync-parsers" }
     use 'lukas-reineke/indent-blankline.nvim'
     use 'jose-elias-alvarez/null-ls.nvim'
     use 'tpope/vim-repeat'
@@ -115,6 +115,12 @@ vim.keymap.set('n', '<leader>wj', '<c-w>j', opts)
 vim.keymap.set('n', '<leader>wk', '<c-w>k', opts)
 vim.keymap.set('n', '<leader>wl', '<c-w>l', opts)
 
+-- autocommand to set conceal level on neorg files
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    pattern = { "*.norg" },
+    command = "setlocal conceallevel=3"
+})
+
 -- LSP Config
 local lspconfig = require 'lspconfig'
 -- Include the servers you want to have installed by default below
@@ -125,11 +131,14 @@ local servers = {
     'lua_ls',
     'texlab',
     'rust_analyzer',
-    -- 'sqls',
     'sqlls',
-    -- 'jdtls',
     'julials',
     'tsserver',
+}
+
+require("mason").setup()
+require("mason-lspconfig").setup {
+    ensure_installed = servers,
 }
 
 
@@ -287,6 +296,7 @@ cmp.setup {
         { name = 'luasnip' },
         { name = 'path' },
         { name = 'buffer' },
+        { name = 'neorg' },
     },
 }
 
@@ -672,6 +682,28 @@ local sources = {
     null_ls.builtins.formatting.rustfmt,
 }
 null_ls.setup { sources = sources }
-require("mason").setup()
-require("mason-lspconfig").setup()
 require 'lspconfig'.sqlls.setup {}
+require("neorg").setup {
+    load = {
+        ["core.defaults"] = {},
+        ["core.dirman"] = {
+            config = {
+                workspaces = {
+                    school = "~/notes/school",
+                    home = "~/notes/home",
+
+                }
+            }
+        },
+        ["core.completion"] = {
+            config = {
+                engine = "nvim-cmp"
+            }
+        },
+        ["core.concealer"] = {
+            config = {
+                folds = true,
+            }
+        },
+    }
+}
