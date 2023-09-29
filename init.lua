@@ -81,7 +81,6 @@ require('packer').startup(function()
     use 'tpope/vim-repeat'
     use 'mfussenegger/nvim-jdtls'
     use 'JuliaEditorSupport/julia-vim'
-    use ''
 end)
 
 --impatient
@@ -650,7 +649,6 @@ vim.keymap.set('n', '<leader>xl', ':Trouble loclist<cr>', opts)
 vim.keymap.set('n', '<leader>xq', ':Trouble quickfix<cr>', opts)
 vim.keymap.set('n', 'gR', ':Trouble lsp_references<cr>', opts)
 
--- neorg
 -- null-ls
 local null_ls = require 'null-ls'
 local sources = {
