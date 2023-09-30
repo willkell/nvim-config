@@ -7,7 +7,7 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 local nvim_config_home = ''
-if vim.fn.has('macunix') then
+if vim.loop.os_uname().sysname == "Darwin" then
     nvim_config_home = '/Users/wk/.config/nvim/'
 else
     nvim_config_home = '/home/wk/.config/nvim/'
@@ -88,6 +88,7 @@ require('packer').startup(function()
     use 'tpope/vim-repeat'
     use 'mfussenegger/nvim-jdtls'
     use 'JuliaEditorSupport/julia-vim'
+    use 'folke/neodev.nvim'
 end)
 
 --impatient
@@ -128,6 +129,10 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     command = "setlocal conceallevel=3"
 })
 
+-- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+require("neodev").setup({
+  -- add any options here, or leave empty to use the default settings
+})
 -- LSP Config
 local lspconfig = require 'lspconfig'
 -- Include the servers you want to have installed by default below
@@ -327,7 +332,7 @@ require('lspconfig').lua_ls.setup {
             },
             diagnostics = {
                 -- Get the language server to recognize the `vim` global
-                globals = { 'vim', 'awesome', 'client', 'root' },
+                globals = { 'vim' },
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files
@@ -338,6 +343,9 @@ require('lspconfig').lua_ls.setup {
             telemetry = {
                 enable = true,
             },
+            completion = {
+                callSnipped = "Replace"
+            }
         },
     },
 }
