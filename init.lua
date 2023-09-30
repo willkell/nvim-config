@@ -5,6 +5,13 @@ local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nv
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
+
+local nvim_config_home = ''
+if vim.fn.has('macunix') then
+    nvim_config_home = '/Users/wk/.config/nvim/'
+else
+    nvim_config_home = '/home/wk/.config/nvim/'
+end
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
@@ -19,7 +26,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.swapfile = false
 vim.o.backup = false
-vim.o.undodir = '/home/wk/.config/nvim/undodir'
+vim.o.undodir = nvim_config_home .. 'undodir'
 vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.scrolloff = 6
@@ -143,7 +150,7 @@ require("mason-lspconfig").setup {
 
 
 local copyConfigFile = function()
-    local configFile = '/home/wk/.config/nvim/dapconfigs/' .. vim.bo.filetype .. '.dapconfig.lua'
+    local configFile = nvim_config_home .. 'dapconfigs/' .. vim.bo.filetype .. '.dapconfig.lua'
     local dapFile, err = io.open(configFile, 'rb')
     if err then
         error(err)
