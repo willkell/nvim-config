@@ -89,6 +89,7 @@ require('packer').startup(function()
     use 'mfussenegger/nvim-jdtls'
     use 'JuliaEditorSupport/julia-vim'
     use 'folke/neodev.nvim'
+    use { 'rush-rs/tree-sitter-asm' }
 end)
 
 --impatient
@@ -146,6 +147,7 @@ local servers = {
     'sqlls',
     'julials',
     'tsserver',
+    'asm_lsp',
 }
 
 require("mason").setup()
@@ -539,6 +541,13 @@ require('nvim-treesitter.configs').setup {
         },
     },
     endwise = { enable = true },
+}
+require('nvim-treesitter.parsers').get_parser_configs().asm = {
+    install_info = {
+        url = 'https://github.com/rush-rs/tree-sitter-asm.git',
+        files = { 'src/parser.c' },
+        branch = 'main',
+    },
 }
 
 --dap virtual text
