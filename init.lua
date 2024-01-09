@@ -36,6 +36,7 @@ vim.g.mapleader = ' '
 vim.o.termguicolors = true
 vim.o.mouse = 'a'
 vim.o.laststatus = 3
+vim.o.mousemodel = extend
 
 local use = require('packer').use
 require('packer').startup(function()
@@ -82,7 +83,6 @@ require('packer').startup(function()
     use 'euclidianAce/BetterLua.vim'
     use 'ThePrimeagen/refactoring.nvim'
     use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
-    use { 'nvim-neorg/neorg', run = ":Neorg sync-parsers" }
     use 'lukas-reineke/indent-blankline.nvim'
     use 'jose-elias-alvarez/null-ls.nvim'
     use 'tpope/vim-repeat'
@@ -90,6 +90,8 @@ require('packer').startup(function()
     use 'JuliaEditorSupport/julia-vim'
     use 'folke/neodev.nvim'
     use { 'rush-rs/tree-sitter-asm' }
+    use 'nvim-orgmode/orgmode'
+    use 'lervag/vimtex'
 end)
 
 --impatient
@@ -124,15 +126,10 @@ vim.keymap.set('n', '<leader>wj', '<c-w>j', opts)
 vim.keymap.set('n', '<leader>wk', '<c-w>k', opts)
 vim.keymap.set('n', '<leader>wl', '<c-w>l', opts)
 
--- autocommand to set conceal level on neorg files
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-    pattern = { "*.norg" },
-    command = "setlocal conceallevel=3"
-})
 
 -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
 require("neodev").setup({
-  -- add any options here, or leave empty to use the default settings
+    -- add any options here, or leave empty to use the default settings
 })
 -- LSP Config
 local lspconfig = require 'lspconfig'
@@ -310,9 +307,14 @@ cmp.setup {
         { name = 'luasnip' },
         { name = 'path' },
         { name = 'buffer' },
-        { name = 'neorg' },
+        { name = 'orgmode' },
     },
 }
+cmp.setup.filetype("tex", {
+    sources = cmp.config.sources({
+        { name = 'vimtex' },
+    })
+})
 
 -- insert brackets after completion
 local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
@@ -707,27 +709,23 @@ local sources = {
 }
 null_ls.setup { sources = sources }
 require 'lspconfig'.sqlls.setup {}
-require("neorg").setup {
-    load = {
-        ["core.defaults"] = {},
-        ["core.dirman"] = {
-            config = {
-                workspaces = {
-                    school = "~/notes/school",
-                    home = "~/notes/home",
+-- Load custom treesitter grammar for org filetype
+require('orgmode').setup_ts_grammar()
 
-                }
-            }
-        },
-        ["core.completion"] = {
-            config = {
-                engine = "nvim-cmp"
-            }
-        },
-        ["core.concealer"] = {
-            config = {
-                folds = true,
-            }
-        },
-    }
+-- Treesitter configuration
+require('nvim-treesitter.configs').setup {
+    -- If TS highlights are not enabled at all, or disabled via `disable` prop,
+    -- highlighting will fallback to default Vim syntax highlighting
+    highlight = {
+        enable = true,
+        -- Required for spellcheck, some LaTex highlights and
+        -- code block highlights that do not have ts grammar
+        additional_vim_regex_highlighting = { 'org' },
+    },
+    ensure_installed = { 'org' }, -- Or run :TSUpdate org
 }
+
+require('orgmode').setup({
+    notifications = { enabled = true },
+    org_agenda_files = '~/notes/org/*'
+})
