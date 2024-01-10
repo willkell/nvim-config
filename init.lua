@@ -177,7 +177,7 @@ end
 
 local on_attach = function()
     --Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.o.omnifunc =  'v:lua.vim.lsp.omnifunc'
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     vim.keymap.set('n', 'gD', function()
