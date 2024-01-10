@@ -52,7 +52,6 @@ require('packer').startup(function()
     use 'mfussenegger/nvim-dap'
     use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
     use 'tpope/vim-surround'
-    use 'tpope/vim-fugitive'
     use 'numToStr/comment.nvim'
     use 'mbbill/undotree'
     use 'hrsh7th/nvim-cmp'
@@ -501,6 +500,14 @@ dap.listeners.after.event_terminated['dapui_config'] = function()
 end
 -- toggleterm
 vim.keymap.set('n', '<leader>tt', ':ToggleTerm<CR>', opts)
+local Terminal = require('toggleterm.terminal').Terminal
+local lazygit  = Terminal:new({ cmd = "lazygit", hidden = true })
+
+function lazygit_toggle()
+    lazygit:toggle()
+end
+
+vim.keymap.set("n", "<leader>gg",lazygit_toggle, opts)
 
 -- local configs
 require('config-local').setup {
@@ -564,11 +571,6 @@ npairs.setup {
     check_ts = true,
 }
 
--- fugitive
-vim.keymap.set('n', 'leadergg', ':GitCR', opts)
-vim.keymap.set('n', '<leader>ga', ':Git add *<CR>', opts)
-vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', opts)
-vim.keymap.set('n', '<leader>gp', ':Git push<CR>', opts)
 
 -- lualine
 require('lualine').setup {
