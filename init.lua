@@ -177,7 +177,7 @@ end
 
 local on_attach = function()
     --Enable completion triggered by <c-x><c-o>
-    vim.o.omnifunc =  'v:lua.vim.lsp.omnifunc'
+    vim.o.omnifunc = 'v:lua.vim.lsp.omnifunc'
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     vim.keymap.set('n', 'gD', function()
@@ -519,7 +519,7 @@ local function set_terminal_keymaps()
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.api.nvim_create_autocmd("TermOpen term://", { callback = set_terminal_keymaps })
+vim.api.nvim_create_autocmd("TermOpen", { pattern = 'term://*', callback = set_terminal_keymaps })
 
 
 -- local configs
