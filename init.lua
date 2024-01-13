@@ -1,4 +1,3 @@
-require 'impatient'
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
@@ -91,9 +90,11 @@ require('packer').startup(function()
     use { 'rush-rs/tree-sitter-asm' }
     use 'nvim-orgmode/orgmode'
     use 'lervag/vimtex'
+    use 'https://codeberg.org/esensar/nvim-dev-container'
 end)
 
 --impatient
+require 'impatient'
 require('impatient').enable_profile()
 --util keymaps
 local opts = { silent = true, remap = false }
@@ -744,3 +745,7 @@ require('orgmode').setup({
     notifications = { enabled = true },
     org_agenda_files = '~/notes/org/*'
 })
+
+-- devcontainer
+require("devcontainer").setup{}
+
