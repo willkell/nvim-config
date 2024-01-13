@@ -47,7 +47,6 @@ vim.o.mousemodel = extend
 local use = require('packer').use
 require('packer').startup(function()
     use 'wbthomason/packer.nvim'
-    use 'lewis6991/impatient.nvim'
     use "williamboman/mason-lspconfig.nvim"
     use "williamboman/mason.nvim"
     use 'nvim-lua/plenary.nvim'
@@ -102,9 +101,8 @@ require('packer').startup(function()
     end
 end)
 
---impatient
-require 'impatient'
-require('impatient').enable_profile()
+-- makes things load faster
+vim.loader.enable()
 --util keymaps
 local opts = { silent = true, remap = false }
 vim.keymap.set({ 'n', 'v' }, 'j', 'gj', opts)
