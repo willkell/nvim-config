@@ -608,56 +608,61 @@ require('lualine').setup {
 
 }
 
--- function to update colorscheme with kitty too
+-- if .colorscheme doesn't exist create it
+if vim.fn.filereadable(nvim_config_home .. '.colorscheme') == 0 then
+    local f = io.open(nvim_config_home .. '.colorscheme', "w")
+    f:write("base16-zenburn")
+    f:close()
+end
 -- this is our single source of truth created above
-if (vim.fn.filereadable(nvim_config_home .. '.colorscheme') == 1)
-then
-    local base16_theme_fname = vim.fn.expand '~/.config/nvim/.colorscheme'
-    -- this function is the only way we should be setting our colorscheme
-    local function set_colorscheme(name)
-        -- write our colorscheme back to our single source of truth
-        vim.fn.writefile({ name }, base16_theme_fname)
-        -- set Neovim's colorscheme
-        vim.cmd('colorscheme ' .. name)
-        -- execute `kitty @ set-colors -c <color>` to change terminal window's
-        -- colors and newly created terminal windows colors
+local base16_theme_fname = vim.fn.expand '~/.config/nvim/.colorscheme'
+-- this function is the only way we should be setting our colorscheme
+local function set_colorscheme(name)
+    -- set Neovim's colorscheme
+    vim.cmd('colorscheme ' .. name)
+    -- if we are using kitty, set kitty colors too
+    if os.getenv("TERM") == 'xterm-kitty' then
+    -- write our colorscheme back to our single source of truth
+    vim.fn.writefile({ name }, base16_theme_fname)
+    -- execute `kitty @ set-colors -c <color>` to change terminal window's
+    -- colors and newly created terminal windows colors
         os.execute('ln -sf ~/.config/kitty/colors/colors/' .. name .. '.conf ~/.config/kitty/theme.conf')
     end
-
-    set_colorscheme(vim.fn.readfile(base16_theme_fname)[1])
-    local telescope_actions = require 'telescope.actions'
-    local action_state = require 'telescope.actions.state'
-    local telescope_action_set = require 'telescope.actions.set'
-
-    vim.keymap.set('n', '<leader>fc', function()
-        -- get our base16 colorschemes
-        local colors = vim.fn.getcompletion('base16', 'color')
-        -- we're trying to mimic VSCode so we'll use dropdown theme
-        local theme = require('telescope.themes').get_dropdown()
-        -- create our picker
-        require('telescope.pickers').new(theme, {
-            prompt_title = 'Change Colorscheme',
-            finder = require('telescope.finders').new_table {
-                results = colors,
-            },
-            sorter = require('telescope.config').values.generic_sorter(theme),
-            attach_mappings = function(bufnr)
-                -- change the colors upon selection
-                telescope_actions.select_default:replace(function()
-                    set_colorscheme(action_state.get_selected_entry().value)
-                    telescope_actions.close(bufnr)
-                end)
-                telescope_action_set.shift_selection:enhance {
-                    -- change the colors upon scrolling
-                    post = function()
-                        set_colorscheme(action_state.get_selected_entry().value)
-                    end,
-                }
-                return true
-            end,
-        }):find()
-    end, opts)
 end
+
+set_colorscheme(vim.fn.readfile(base16_theme_fname)[1])
+local telescope_actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
+local telescope_action_set = require 'telescope.actions.set'
+
+vim.keymap.set('n', '<leader>fc', function()
+    -- get our base16 colorschemes
+    local colors = vim.fn.getcompletion('base16', 'color')
+    -- we're trying to mimic VSCode so we'll use dropdown theme
+    local theme = require('telescope.themes').get_dropdown()
+    -- create our picker
+    require('telescope.pickers').new(theme, {
+        prompt_title = 'Change Colorscheme',
+        finder = require('telescope.finders').new_table {
+            results = colors,
+        },
+        sorter = require('telescope.config').values.generic_sorter(theme),
+        attach_mappings = function(bufnr)
+            -- change the colors upon selection
+            telescope_actions.select_default:replace(function()
+                set_colorscheme(action_state.get_selected_entry().value)
+                telescope_actions.close(bufnr)
+            end)
+            telescope_action_set.shift_selection:enhance {
+                -- change the colors upon scrolling
+                post = function()
+                    set_colorscheme(action_state.get_selected_entry().value)
+                end,
+            }
+            return true
+        end,
+    }):find()
+end, opts)
 
 -- neomake
 vim.cmd "call neomake#configure#automake('w')"
