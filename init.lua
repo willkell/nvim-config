@@ -1,9 +1,16 @@
 -- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
+
+local packer_bootstrap = ensure_packer()
 
 local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
@@ -39,10 +46,10 @@ vim.o.mousemodel = extend
 
 local use = require('packer').use
 require('packer').startup(function()
+    use 'wbthomason/packer.nvim'
     use 'lewis6991/impatient.nvim'
     use "williamboman/mason-lspconfig.nvim"
     use "williamboman/mason.nvim"
-    use 'wbthomason/packer.nvim'
     use 'nvim-lua/plenary.nvim'
     use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -91,6 +98,9 @@ require('packer').startup(function()
     use 'nvim-orgmode/orgmode'
     use 'lervag/vimtex'
     use 'https://codeberg.org/esensar/nvim-dev-container'
+      if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
 
 --impatient
