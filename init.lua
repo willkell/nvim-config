@@ -610,7 +610,7 @@ require('lualine').setup {
 
 -- function to update colorscheme with kitty too
 -- this is our single source of truth created above
-if (vim.fn.filereadable(nvim_config_home .. '.colorscheme'))
+if (vim.fn.filereadable(nvim_config_home .. '.colorscheme') == 1)
 then
     local base16_theme_fname = vim.fn.expand '~/.config/nvim/.colorscheme'
     -- this function is the only way we should be setting our colorscheme
@@ -748,7 +748,6 @@ require('nvim-treesitter.configs').setup {
         -- code block highlights that do not have ts grammar
         additional_vim_regex_highlighting = { 'org' },
     },
-    ensure_installed = { 'org' }, -- Or run :TSUpdate org
 }
 
 require('orgmode').setup({
