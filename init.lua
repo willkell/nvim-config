@@ -12,11 +12,15 @@ end
 
 local packer_bootstrap = ensure_packer()
 
+-- figure out user
+local handle = io.popen('whoami')
+local output = handle:read('*a'):gsub('[\n\r]', '')
+
 local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
-    nvim_config_home = '/Users/' .. os.getenv('USER') .. '/.config/nvim/'
+    nvim_config_home = '/Users/' .. output .. '/.config/nvim/'
 else
-    nvim_config_home = '/home/' .. os.getenv('USER') .. '/.config/nvim/'
+    nvim_config_home = '/home/' .. output .. '/.config/nvim/'
 end
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
