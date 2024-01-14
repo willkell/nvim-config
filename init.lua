@@ -14,9 +14,9 @@ local packer_bootstrap = ensure_packer()
 
 local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
-    nvim_config_home = '/Users/wk/.config/nvim/'
+    nvim_config_home = '/Users/' .. os.getenv('USER') .. '/.config/nvim/'
 else
-    nvim_config_home = '/home/wk/.config/nvim/'
+    nvim_config_home = '/home/' .. os.getenv('USER') .. '/.config/nvim/'
 end
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
