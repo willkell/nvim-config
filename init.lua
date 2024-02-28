@@ -18,7 +18,9 @@ local output = handle:read('*a'):gsub('[\n\r]', '')
 
 local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
-    nvim_config_home = '/Users/' .. output .. '/.config/nvim/'
+    nvim_config_home = '/Users/' .. string.sub(output, 9, -1) .. '/.config/nvim/'
+elseif vim.loop.os_uname().sysname == "Windows_NT" then
+    nvim_config_home = 'C:\\Users\\' .. string.sub(output, 9, -1) .. '\\AppData\\Local\\nvim\\'
 else
     nvim_config_home = '/home/' .. output .. '/.config/nvim/'
 end
@@ -73,11 +75,11 @@ require('packer').startup(function()
     use 'klen/nvim-config-local'
     use { 'akinsho/toggleterm.nvim', tag = 'v1.*' }
     use 'ludovicchabant/vim-gutentags'
-    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
     use { 'tami5/sqlite.lua' }
     use { 'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua' }
     use 'theHamsta/nvim-dap-virtual-text'
-    use 'p00f/nvim-ts-rainbow'
+    use 'hiphish/rainbow-delimiters.nvim'
     use 'RRethy/nvim-treesitter-endwise'
     use 'windwp/nvim-autopairs'
     use 'nvim-lualine/lualine.nvim'
@@ -117,15 +119,15 @@ end, opts)
 vim.keymap.set({ 'n', 'v', 'i' }, '<Up>', function()
     vim.api.nvim_command 'normal gk'
 end, opts)
-vim.keymap.set('n', '<leader>cl', ':so ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>cl', ':so ' .. nvim_config_home .. 'init.lua<CR>', opts)
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>pi', ':so ~/.config/nvim/init.lua<CR>:PackerInstall<CR>', opts)
-vim.keymap.set('n', '<leader>ps', ':so ~/.config/nvim/init.lua<CR>:PackerSync<CR>', opts)
+vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
+vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
 vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
-vim.keymap.set('n', '<leader>en', ':e ~/.config/nvim/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>en', ':e ' .. nvim_config_home .. 'init.lua<CR>', opts)
 vim.keymap.set('n', '<leader>s', function()
     vim.api.nvim_command 'write'
 end, opts)
@@ -562,16 +564,6 @@ require('nvim-treesitter.configs').setup {
     highlight = { enable = true },
     incremental_selection = { enable = true },
     indent = { enable = true },
-    rainbow = {
-        enable = true,
-        extended_mode = true,
-        colors = {
-            '#cda869',
-            '9b703f',
-            '#838184',
-            '#c3c3c3',
-        },
-    },
     endwise = { enable = true },
 }
 require('nvim-treesitter.parsers').get_parser_configs().asm = {
@@ -580,6 +572,16 @@ require('nvim-treesitter.parsers').get_parser_configs().asm = {
         files = { 'src/parser.c' },
         branch = 'main',
     },
+}
+
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.org = {
+    install_info = {
+        url = 'https://github.com/milisims/tree-sitter-org',
+        revision = 'main',
+        files = { 'src/parser.c', 'src/scanner.c' },
+    },
+    filetype = 'org',
 }
 
 --dap virtual text
@@ -617,17 +619,17 @@ if vim.fn.filereadable(nvim_config_home .. '.colorscheme') == 0 then
     f:close()
 end
 -- this is our single source of truth created above
-local base16_theme_fname = vim.fn.expand '~/.config/nvim/.colorscheme'
+local base16_theme_fname = vim.fn.expand(nvim_config_home .. '.colorscheme')
 -- this function is the only way we should be setting our colorscheme
 local function set_colorscheme(name)
     -- set Neovim's colorscheme
     vim.cmd('colorscheme ' .. name)
     -- if we are using kitty, set kitty colors too
     if os.getenv("TERM") == 'xterm-kitty' then
-    -- write our colorscheme back to our single source of truth
-    vim.fn.writefile({ name }, base16_theme_fname)
-    -- execute `kitty @ set-colors -c <color>` to change terminal window's
-    -- colors and newly created terminal windows colors
+        -- write our colorscheme back to our single source of truth
+        vim.fn.writefile({ name }, base16_theme_fname)
+        -- execute `kitty @ set-colors -c <color>` to change terminal window's
+        -- colors and newly created terminal windows colors
         os.execute('ln -sf ~/.config/kitty/colors/colors/' .. name .. '.conf ~/.config/kitty/theme.conf')
     end
 end
