@@ -761,5 +761,5 @@ require('nvim-treesitter.configs').setup {
 
 require('orgmode').setup({
     notifications = { enabled = true },
-    org_agenda_files = '~/notes/org/*'
+    org_agenda_files = '~/notes/*'
 })
