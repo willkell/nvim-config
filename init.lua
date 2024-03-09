@@ -102,6 +102,7 @@ require('packer').startup(function()
     use { 'rush-rs/tree-sitter-asm' }
     use 'nvim-orgmode/orgmode'
     use 'lervag/vimtex'
+    use{  'nvim-neorg/neorg', run = ':Neorg sync-parsers' }
     if packer_bootstrap then
         require('packer').sync()
     end
@@ -763,3 +764,9 @@ require('orgmode').setup({
     notifications = { enabled = true },
     org_agenda_files = '~/notes/org/*'
 })
+
+require('neorg').setup {
+    load = {
+        ["core.defaults"] = {}
+    }
+}
