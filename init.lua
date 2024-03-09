@@ -18,7 +18,7 @@ local output = handle:read('*a'):gsub('[\n\r]', '')
 
 local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
-    nvim_config_home = '/Users/' .. string.sub(output, 9, -1) .. '/.config/nvim/'
+    nvim_config_home = '/Users/' .. output .. '/.config/nvim/'
 elseif vim.loop.os_uname().sysname == "Windows_NT" then
     nvim_config_home = 'C:\\Users\\' .. string.sub(output, 9, -1) .. '\\AppData\\Local\\nvim\\'
 else
@@ -762,7 +762,7 @@ require('nvim-treesitter.configs').setup {
 
 require('orgmode').setup({
     notifications = { enabled = true },
-    org_agenda_files = '~/notes/org/*'
+    org_agenda_files = '~/notes/*'
 })
 
 require('neorg').setup {
