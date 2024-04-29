@@ -1,16 +1,16 @@
--- Install packer
-local ensure_packer = function()
-    local fn = vim.fn
-    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-    if fn.empty(fn.glob(install_path)) > 0 then
-        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
-        vim.cmd [[packadd packer.nvim]]
-        return true
-    end
-    return false
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer_bootstrap = ensure_packer()
 
 -- figure out user
 local handle = io.popen('whoami')
@@ -50,64 +50,69 @@ vim.o.mouse = 'a'
 vim.o.laststatus = 3
 vim.o.mousemodel = extend
 
-local use = require('packer').use
-require('packer').startup(function()
-    use 'wbthomason/packer.nvim'
-    use "williamboman/mason-lspconfig.nvim"
-    use "williamboman/mason.nvim"
-    use 'nvim-lua/plenary.nvim'
-    use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-    use 'kyazdani42/nvim-web-devicons'
-    use 'neovim/nvim-lspconfig'
-    use 'mfussenegger/nvim-dap'
-    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
-    use 'tpope/vim-surround'
-    use 'numToStr/comment.nvim'
-    use 'mbbill/undotree'
-    use 'hrsh7th/nvim-cmp'
-    use 'hrsh7th/cmp-path'
-  use { "nvim-neotest/nvim-nio" }
-    use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'saadparwaiz1/cmp_luasnip'
-    use 'L3MON4D3/LuaSnip'
-    use 'rafamadriz/friendly-snippets'
-    use 'klen/nvim-config-local'
-    use { 'akinsho/toggleterm.nvim', tag = 'v1.*' }
-    use 'ludovicchabant/vim-gutentags'
-    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-    use { 'tami5/sqlite.lua' }
-    use { 'nvim-telescope/telescope-frecency.nvim', requires = 'tami15/sqlite.lua' }
-    use 'theHamsta/nvim-dap-virtual-text'
-    use 'hiphish/rainbow-delimiters.nvim'
-    use 'RRethy/nvim-treesitter-endwise'
-    use 'windwp/nvim-autopairs'
-    use 'nvim-lualine/lualine.nvim'
-    use 'rrethy/nvim-base16'
-    use 'neomake/neomake'
-    use 'goolord/alpha-nvim'
-    use 'shatur/neovim-session-manager'
-    use 'kyazdani42/nvim-tree.lua'
-    use 'nvim-lua/popup.nvim'
-    use 'tjdevries/nlua.nvim'
-    use 'euclidianAce/BetterLua.vim'
-    use 'ThePrimeagen/refactoring.nvim'
-    use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
-    use 'lukas-reineke/indent-blankline.nvim'
-    use 'jose-elias-alvarez/null-ls.nvim'
-    use 'tpope/vim-repeat'
-    use 'mfussenegger/nvim-jdtls'
-    use 'JuliaEditorSupport/julia-vim'
-    use 'folke/neodev.nvim'
-    use { 'rush-rs/tree-sitter-asm' }
-    use 'nvim-orgmode/orgmode'
-    use 'lervag/vimtex'
-    use{  'nvim-neorg/neorg', run = ':Neorg sync-parsers' }
-    if packer_bootstrap then
-        require('packer').sync()
-    end
-end)
+require('lazy').setup({
+    {
+        "vhyrro/luarocks.nvim",
+        priority = 1000,
+        config = true,
+    },
+    {
+        "nvim-neorg/neorg",
+        dependencies = { "luarocks.nvim" },
+        lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
+        version = "*", -- Pin Neorg to the latest stable release
+        config = true,
+    },
+    "williamboman/mason-lspconfig.nvim",
+    "williamboman/mason.nvim",
+    'nvim-lua/plenary.nvim',
+    { 'nvim-telescope/telescope.nvim',   dependencies = { 'nvim-lua/plenary.nvim' } },
+    { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
+    'kyazdani42/nvim-web-devicons',
+    'neovim/nvim-lspconfig',
+    'mfussenegger/nvim-dap',
+    { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap' } },
+    'tpope/vim-surround',
+    'numToStr/comment.nvim',
+    'mbbill/undotree',
+    'hrsh7th/nvim-cmp',
+    'hrsh7th/cmp-path',
+    { "nvim-neotest/nvim-nio" },
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-nvim-lsp',
+    'saadparwaiz1/cmp_luasnip',
+    'L3MON4D3/LuaSnip',
+    'rafamadriz/friendly-snippets',
+    'klen/nvim-config-local',
+    { 'akinsho/toggleterm.nvim',                  version = 'v1.*' },
+    'ludovicchabant/vim-gutentags',
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
+    'nvim-telescope/telescope-frecency.nvim',
+    'theHamsta/nvim-dap-virtual-text',
+    'hiphish/rainbow-delimiters.nvim',
+    'RRethy/nvim-treesitter-endwise',
+    'windwp/nvim-autopairs',
+    'nvim-lualine/lualine.nvim',
+    'rrethy/nvim-base16',
+    'neomake/neomake',
+    'goolord/alpha-nvim',
+    'shatur/neovim-session-manager',
+    'kyazdani42/nvim-tree.lua',
+    'nvim-lua/popup.nvim',
+    'tjdevries/nlua.nvim',
+    'euclidianAce/BetterLua.vim',
+    'ThePrimeagen/refactoring.nvim',
+    { 'folke/trouble.nvim',     dependencies = 'kyazdani42/nvim-web-devicons' },
+    'lukas-reineke/indent-blankline.nvim',
+    'jose-elias-alvarez/null-ls.nvim',
+    'tpope/vim-repeat',
+    'mfussenegger/nvim-jdtls',
+    'JuliaEditorSupport/julia-vim',
+    'folke/neodev.nvim',
+    { 'rush-rs/tree-sitter-asm' },
+    'nvim-orgmode/orgmode',
+    'lervag/vimtex',
+})
 
 -- makes things load faster
 vim.loader.enable()
@@ -746,8 +751,6 @@ local sources = {
 }
 null_ls.setup { sources = sources }
 require 'lspconfig'.sqlls.setup {}
--- Load custom treesitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
 
 -- Treesitter configuration
 require('nvim-treesitter.configs').setup {
@@ -765,9 +768,3 @@ require('orgmode').setup({
     notifications = { enabled = true },
     org_agenda_files = '~/notes/*'
 })
-
-require('neorg').setup {
-    load = {
-        ["core.defaults"] = {}
-    }
-}
