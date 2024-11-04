@@ -131,7 +131,6 @@ vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
--- vim.keymap.set('n', '<leader>ll', ':w<CR>:VimtexCompile<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ' .. nvim_config_home .. 'init.lua<CR>', opts)
 vim.keymap.set('n', '<leader>s', function()
     vim.api.nvim_command 'write'
