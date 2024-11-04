@@ -45,6 +45,7 @@ vim.o.scrolloff = 6
 vim.o.colorcolumn = '80'
 vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 vim.o.termguicolors = true
 vim.o.mouse = 'a'
 vim.o.laststatus = 3
@@ -96,7 +97,6 @@ require('lazy').setup({
     'rrethy/nvim-base16',
     'neomake/neomake',
     'goolord/alpha-nvim',
-    'shatur/neovim-session-manager',
     'kyazdani42/nvim-tree.lua',
     'nvim-lua/popup.nvim',
     'tjdevries/nlua.nvim',
@@ -130,10 +130,8 @@ vim.keymap.set('n', '<leader>cl', ':so ' .. nvim_config_home .. 'init.lua<CR>', 
 vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
 vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
 vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>pi', ':PackerInstall<CR>', opts)
-vim.keymap.set('n', '<leader>ps', ':PackerSync<CR>', opts)
 vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
-vim.keymap.set('n', '<leader>tb', ':w<CR>:TexlabBuild<CR>', opts)
+-- vim.keymap.set('n', '<leader>ll', ':w<CR>:VimtexCompile<CR>', opts)
 vim.keymap.set('n', '<leader>en', ':e ' .. nvim_config_home .. 'init.lua<CR>', opts)
 vim.keymap.set('n', '<leader>s', function()
     vim.api.nvim_command 'write'
@@ -163,7 +161,6 @@ local servers = {
     'rust_analyzer',
     'sqlls',
     'julials',
-    'tsserver',
     'asm_lsp',
 }
 
@@ -691,11 +688,6 @@ dashboard.section.buttons.val = {
     dashboard.button('q', '   Quit NVIM', ':qa<CR>'),
 }
 alpha.setup(dashboard.config)
---session manager
-require('session_manager').setup {
-    autoload_mode = require('session_manager.config').AutoloadMode.Disabled,
-}
-vim.keymap.set('n', '<leader>ls', ':SessionManager load_last_session<CR>', opts)
 
 -- file explorer
 require('nvim-tree').setup()
@@ -768,3 +760,10 @@ require('orgmode').setup({
     notifications = { enabled = true },
     org_agenda_files = '~/notes/*'
 })
+
+
+
+
+-- vimtex
+vim.g.vimtex_view_method = "zathura"
+vim.g.vimtex_compiler_method = "latexrun"
