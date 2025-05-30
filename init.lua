@@ -1,13 +1,17 @@
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -42,7 +46,7 @@ vim.o.undodir = nvim_config_home .. 'undodir'
 vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.scrolloff = 6
-vim.o.colorcolumn = '80'
+vim.o.colorcolumn = '100'
 vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -52,6 +56,7 @@ vim.o.laststatus = 3
 vim.o.mousemodel = extend
 
 require('lazy').setup({
+    spec = {
     {
         "vhyrro/luarocks.nvim",
         priority = 1000,
@@ -80,13 +85,12 @@ require('lazy').setup({
     'hrsh7th/cmp-path',
     { "nvim-neotest/nvim-nio" },
     'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lsp',
     'saadparwaiz1/cmp_luasnip',
     'L3MON4D3/LuaSnip',
     'rafamadriz/friendly-snippets',
     'klen/nvim-config-local',
     { 'akinsho/toggleterm.nvim',                  version = 'v1.*' },
-    'ludovicchabant/vim-gutentags',
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
     'nvim-telescope/telescope-frecency.nvim',
     'theHamsta/nvim-dap-virtual-text',
@@ -104,7 +108,7 @@ require('lazy').setup({
     'ThePrimeagen/refactoring.nvim',
     { 'folke/trouble.nvim',     dependencies = 'kyazdani42/nvim-web-devicons' },
     'lukas-reineke/indent-blankline.nvim',
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
     'tpope/vim-repeat',
     'mfussenegger/nvim-jdtls',
     'JuliaEditorSupport/julia-vim',
@@ -112,6 +116,10 @@ require('lazy').setup({
     { 'rush-rs/tree-sitter-asm' },
     'nvim-orgmode/orgmode',
     'lervag/vimtex',
+    'airblade/vim-gitgutter',
+    'rhysd/git-messenger.vim',
+    'NeogitOrg/neogit',
+    }
 })
 
 -- makes things load faster
@@ -551,7 +559,7 @@ require('config-local').setup {
 local telescope = require 'telescope'
 local tel_built = require 'telescope.builtin'
 telescope.setup()
-telescope.load_extension 'fzf'
+-- telescope.load_extension 'fzf'
 telescope.load_extension 'frecency'
 
 -- telescope Mappings
@@ -719,28 +727,28 @@ vim.keymap.set('n', '<leader>xq', ':Trouble quickfix<cr>', opts)
 vim.keymap.set('n', 'gR', ':Trouble lsp_references<cr>', opts)
 
 -- null-ls
-local null_ls = require 'null-ls'
-local sources = {
-    null_ls.builtins.formatting.stylua.with {
-        extra_args = { '--config-path', vim.fn.expand '~/.config/formatters/stylua.toml', '--verify' },
-    },
-    null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.clang_format.with {
-        extra_args = { '--style', '{BasedOnStyle: LLVM, IndentWidth = 4}' },
-    },
-    null_ls.builtins.diagnostics.cppcheck.with {
-        extra_args = { '--std=c++17', '--language=c++' }
-    },
-    null_ls.builtins.diagnostics.luacheck.with {
-        extra_args = { '--globals', 'vim' },
-    },
-    null_ls.builtins.diagnostics.pylama,
-    null_ls.builtins.formatting.isort.with {
-        extra_args = { '--profile', 'black' },
-    },
-    null_ls.builtins.formatting.rustfmt,
-}
-null_ls.setup { sources = sources }
+-- local null_ls = require 'null-ls'
+-- local sources = {
+--     null_ls.builtins.formatting.stylua.with {
+--         extra_args = { '--config-path', vim.fn.expand '~/.config/formatters/stylua.toml', '--verify' },
+--     },
+--     null_ls.builtins.formatting.black,
+--     null_ls.builtins.formatting.clang_format.with {
+--         extra_args = { '--style', '{BasedOnStyle: LLVM, IndentWidth = 4}' },
+--     },
+--     null_ls.builtins.diagnostics.cppcheck.with {
+--         extra_args = { '--std=c++17', '--language=c++' }
+--     },
+--     null_ls.builtins.diagnostics.luacheck.with {
+--         extra_args = { '--globals', 'vim' },
+--     },
+--     null_ls.builtins.diagnostics.pylama,
+--     null_ls.builtins.formatting.isort.with {
+--         extra_args = { '--profile', 'black' },
+--     },
+--     null_ls.builtins.formatting.rustfmt,
+-- }
+-- null_ls.setup { sources = sources }
 require 'lspconfig'.sqlls.setup {}
 
 -- Treesitter configuration
