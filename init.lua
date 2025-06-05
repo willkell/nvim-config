@@ -24,7 +24,7 @@ local nvim_config_home = ''
 if vim.loop.os_uname().sysname == "Darwin" then
     nvim_config_home = '/Users/' .. output .. '/.config/nvim/'
 elseif vim.loop.os_uname().sysname == "Windows_NT" then
-    nvim_config_home = 'C:\\Users\\' .. string.sub(output, 9, -1) .. '\\AppData\\Local\\nvim\\'
+    nvim_config_home = 'C:\\Users\\' .. string.sub(output, string.find(output, '\\'), -1) .. '\\AppData\\Local\\nvim\\'
 else
     nvim_config_home = '/home/' .. output .. '/.config/nvim/'
 end
@@ -55,70 +55,79 @@ vim.o.mouse = 'a'
 vim.o.laststatus = 3
 vim.o.mousemodel = extend
 
+local powershell_options = {
+  shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+  shellquote = "",
+  shellxquote = "",
+}
+
+for option, value in pairs(powershell_options) do
+  vim.opt[option] = value
+end
+
 require('lazy').setup({
     spec = {
-    {
-        "vhyrro/luarocks.nvim",
-        priority = 1000,
-        config = true,
-    },
-    {
-        "nvim-neorg/neorg",
-        dependencies = { "luarocks.nvim" },
-        lazy = false,  -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
-        version = "*", -- Pin Neorg to the latest stable release
-        config = true,
-    },
-    "williamboman/mason-lspconfig.nvim",
-    "williamboman/mason.nvim",
+    { "vhyrro/luarocks.nvim", priority = 1000, config = true, },
+    { "nvim-neorg/neorg", dependencies = { "luarocks.nvim" }, lazy = false,  version = "*", config = true, },
+    { "mason-org/mason-lspconfig.nvim", opts = {}, dependencies = { { "mason-org/mason.nvim", opts = {} }, "neovim/nvim-lspconfig", }, },
+    'airblade/vim-gitgutter',
+    { 'akinsho/toggleterm.nvim',                  version = 'v1.*' },
+    'dstein64/vim-startuptime',
+    'ellisonleao/dotenv.nvim',
+    'euclidianAce/BetterLua.vim',
+    'f-person/git-blame.nvim',
+    'folke/neodev.nvim',
+    { 'folke/trouble.nvim',     dependencies = 'kyazdani42/nvim-web-devicons' },
+    'goolord/alpha-nvim',
+    'hiphish/rainbow-delimiters.nvim',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-path',
+    'hrsh7th/nvim-cmp',
+    'JuliaEditorSupport/julia-vim',
+    'klen/nvim-config-local',
+    'kyazdani42/nvim-tree.lua',
+    'kyazdani42/nvim-web-devicons',
+    'L3MON4D3/LuaSnip',
+    'lervag/vimtex',
+    'lukas-reineke/indent-blankline.nvim',
+    'mason-org/mason-lspconfig.nvim',
+    'mason-org/mason.nvim',
+    'mbbill/undotree',
+    'mfussenegger/nvim-dap',
+    'mfussenegger/nvim-jdtls',
+    'NeogitOrg/neogit',
+    'neomake/neomake',
+    {'neovim/nvim-lspconfig'},
+    'numToStr/comment.nvim',
+    'nvim-lua/lsp-status.nvim',
     'nvim-lua/plenary.nvim',
+    'nvim-lua/popup.nvim',
+    'nvim-lualine/lualine.nvim',
+    { "nvim-neotest/nvim-nio" },
+    'nvim-orgmode/orgmode',
+    'nvim-telescope/telescope-frecency.nvim',
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
     { 'nvim-telescope/telescope.nvim',   dependencies = { 'nvim-lua/plenary.nvim' } },
     { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
-    'kyazdani42/nvim-web-devicons',
-    'neovim/nvim-lspconfig',
-    'mfussenegger/nvim-dap',
-    { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap' } },
-    'tpope/vim-surround',
-    'numToStr/comment.nvim',
-    'mbbill/undotree',
-    'hrsh7th/nvim-cmp',
-    'hrsh7th/cmp-path',
-    { "nvim-neotest/nvim-nio" },
-    'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-nvim-lsp',
-    'saadparwaiz1/cmp_luasnip',
-    'L3MON4D3/LuaSnip',
-    'rafamadriz/friendly-snippets',
-    'klen/nvim-config-local',
-    { 'akinsho/toggleterm.nvim',                  version = 'v1.*' },
-    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
-    'nvim-telescope/telescope-frecency.nvim',
-    'theHamsta/nvim-dap-virtual-text',
-    'hiphish/rainbow-delimiters.nvim',
-    'RRethy/nvim-treesitter-endwise',
-    'windwp/nvim-autopairs',
-    'nvim-lualine/lualine.nvim',
-    'rrethy/nvim-base16',
-    'neomake/neomake',
-    'goolord/alpha-nvim',
-    'kyazdani42/nvim-tree.lua',
-    'nvim-lua/popup.nvim',
-    'tjdevries/nlua.nvim',
-    'euclidianAce/BetterLua.vim',
-    'ThePrimeagen/refactoring.nvim',
-    { 'folke/trouble.nvim',     dependencies = 'kyazdani42/nvim-web-devicons' },
-    'lukas-reineke/indent-blankline.nvim',
     'nvimtools/none-ls.nvim',
-    'tpope/vim-repeat',
-    'mfussenegger/nvim-jdtls',
-    'JuliaEditorSupport/julia-vim',
-    'folke/neodev.nvim',
-    { 'rush-rs/tree-sitter-asm' },
-    'nvim-orgmode/orgmode',
-    'lervag/vimtex',
-    'airblade/vim-gitgutter',
+    'rafamadriz/friendly-snippets',
+    { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap' } },
     'rhysd/git-messenger.vim',
-    'NeogitOrg/neogit',
+    'rrethy/nvim-base16',
+    'RRethy/nvim-treesitter-endwise',
+    { 'rush-rs/tree-sitter-asm' },
+    'saadparwaiz1/cmp_luasnip',
+    'theHamsta/nvim-dap-virtual-text',
+    'ThePrimeagen/refactoring.nvim',
+    'tjdevries/nlua.nvim',
+    'tpope/vim-fugitive',
+    'tpope/vim-repeat',
+    'tpope/vim-surround',
+    'windwp/nvim-autopairs',
     }
 })
 
@@ -158,21 +167,21 @@ require("neodev").setup({
 })
 -- LSP Config
 local lspconfig = require 'lspconfig'
--- Include the servers you want to have installed by default below
-local servers = {
-    'bashls',
-    'pyright',
-    'clangd',
-    'lua_ls',
-    'texlab',
-    'rust_analyzer',
-    'sqlls',
-    'julials',
-    'asm_lsp',
-}
+-- -- Include the servers you want to have installed by default below
+-- local servers = {
+--     'bashls',
+--     'pyright',
+--     'clangd',
+--     'lua_ls',
+--     'texlab',
+--     'rust_analyzer',
+--     'sqlls',
+--     'julials',
+--     'asm_lsp',
+-- }
 
 require("mason").setup()
-require("mason-lspconfig").setup()
+-- require("mason-lspconfig").setup()
 
 
 local copyConfigFile = function()
@@ -258,12 +267,12 @@ end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-        on_attach = on_attach(),
-        capabilities = capabilities,
-    }
-end
+-- for _, lsp in ipairs(servers) do
+--     lspconfig[lsp].setup {
+--         on_attach = on_attach(),
+--         capabilities = capabilities,
+--     }
+-- end
 
 require 'lspconfig'.omnisharp.setup {
     cmd = { "dotnet", "/usr/lib/omnisharp-roslyn/OmniSharp.dll" },
@@ -345,36 +354,36 @@ cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done { map_char = { tex = 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
-require('lspconfig').lua_ls.setup {
-    on_attach = on_attach(),
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
-                -- Setup your lua path
-                path = '/usr/bin/lua',
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim' },
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                checkThirdParty = false,
-                library = vim.api.nvim_get_runtime_file('', true),
-                preloadFileSize = 2000000,
-            },
-            telemetry = {
-                enable = true,
-            },
-            completion = {
-                callSnipped = "Replace"
-            }
-        },
-    },
-}
+-- require('lspconfig').lua_ls.setup {
+--     on_attach = on_attach(),
+--     capabilities = capabilities,
+--     settings = {
+--         Lua = {
+--             runtime = {
+--                 -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--                 version = 'LuaJIT',
+--                 -- Setup your lua path
+--                 path = '/usr/bin/lua',
+--             },
+--             diagnostics = {
+--                 -- Get the language server to recognize the `vim` global
+--                 globals = { 'vim' },
+--             },
+--             workspace = {
+--                 -- Make the server aware of Neovim runtime files
+--                 checkThirdParty = false,
+--                 library = vim.api.nvim_get_runtime_file('', true),
+--                 preloadFileSize = 2000000,
+--             },
+--             telemetry = {
+--                 enable = true,
+--             },
+--             completion = {
+--                 callSnipped = "Replace"
+--             }
+--         },
+--     },
+-- }
 
 -- LuaSnip
 require('luasnip.loaders.from_vscode').load()
@@ -608,6 +617,23 @@ npairs.setup {
 }
 
 
+local function lsp_progress()
+  local messages = vim.lsp.util.get_progress_messages()
+  if #messages == 0 then
+    return
+  end
+  local status = {}
+  for _, msg in pairs(messages) do
+    table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
+  end
+  local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+  local ms = vim.loop.hrtime() / 1000000
+  local frame = math.floor(ms / 120) % #spinners
+  return table.concat(status, " | ") .. " " .. spinners[frame + 1]
+end
+local git_blame = require('gitblame')
+-- This disables showing of the blame text next to the cursor
+vim.g.gitblame_display_virtual_text = 0
 -- lualine
 require('lualine').setup {
     sections = {
@@ -618,7 +644,7 @@ require('lualine').setup {
                 path = 3,
             }
         },
-        lualine_x = { 'ctime', 'filetype' },
+        lualine_x = { {git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available}, 'ctime', 'filetype' },
     },
 
 }
@@ -774,3 +800,7 @@ require('orgmode').setup({
 -- vimtex
 vim.g.vimtex_view_method = "zathura"
 vim.g.vimtex_compiler_method = "latexrun"
+-- dotenv
+require('dotenv').setup({
+    enable_on_load = true,
+})
