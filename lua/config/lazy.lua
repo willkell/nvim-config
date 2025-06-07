@@ -559,3 +559,4 @@ require("conform").setup({
 
 
 require("zenburn").setup()
+vim.cmd [[colorscheme zenburn]]
