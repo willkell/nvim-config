@@ -28,47 +28,8 @@ elseif vim.loop.os_uname().sysname == "Windows_NT" then
 else
     nvim_config_home = '/home/' .. output .. '/.config/nvim/'
 end
-vim.o.expandtab = true
-vim.o.shiftwidth = 4
-vim.o.tabstop = 4
-vim.o.softtabstop = 4
-vim.o.hidden = true
-vim.o.relativenumber = true
-vim.o.number = true
-vim.o.errorbells = false
-vim.o.smartindent = true
-vim.o.hlsearch = false
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.swapfile = false
-vim.o.backup = false
-vim.o.undodir = nvim_config_home .. 'undodir'
-vim.o.undofile = true
-vim.o.incsearch = true
-vim.o.scrolloff = 6
-vim.o.colorcolumn = '100'
-vim.o.signcolumn = 'yes'
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-vim.o.termguicolors = true
-vim.o.mouse = 'a'
-vim.o.laststatus = 3
-vim.o.mousemodel = extend
-vim.o.formatexpr = [[v:lua.require("conform").formatexpr()]]
+require("config.options")
 
-local powershell_options = {
-    shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
-    shellcmdflag =
-    "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-    shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-    shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-    shellquote = "",
-    shellxquote = "",
-}
-
-for option, value in pairs(powershell_options) do
-    vim.opt[option] = value
-end
 
 require('lazy').setup({
     spec = {
