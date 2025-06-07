@@ -16,18 +16,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 
--- figure out user
-local handle = io.popen('whoami')
-local output = handle:read('*a'):gsub('[\n\r]', '')
-
-local nvim_config_home = ''
-if vim.loop.os_uname().sysname == "Darwin" then
-    nvim_config_home = '/Users/' .. output .. '/.config/nvim/'
-elseif vim.loop.os_uname().sysname == "Windows_NT" then
-    nvim_config_home = 'C:\\Users\\' .. string.sub(output, string.find(output, '\\'), -1) .. '\\AppData\\Local\\nvim\\'
-else
-    nvim_config_home = '/home/' .. output .. '/.config/nvim/'
-end
 require("config.options")
 require("config.keymaps")
 
@@ -588,13 +576,13 @@ require('lualine').setup {
 }
 
 -- if .colorscheme doesn't exist create it
-if vim.fn.filereadable(nvim_config_home .. '.colorscheme') == 0 then
-    local f = io.open(nvim_config_home .. '.colorscheme', "w")
+if vim.fn.filereadable(vim.fn.stdpath("config") .. '/.colorscheme') == 0 then
+    local f = io.open(vim.fn.stdpath("config") .. '/.colorscheme', "w")
     f:write("base16-zenburn")
     f:close()
 end
 -- this is our single source of truth created above
-local base16_theme_fname = vim.fn.expand(nvim_config_home .. '.colorscheme')
+local base16_theme_fname = vim.fn.expand(vim.fn.stdpath("config") .. '/.colorscheme')
 -- this function is the only way we should be setting our colorscheme
 local function set_colorscheme(name)
     -- set Neovim's colorscheme
