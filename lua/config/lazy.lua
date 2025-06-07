@@ -15,79 +15,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
-    spec = {
-        { "vhyrro/luarocks.nvim",           priority = 1000,                    config = true, },
-        { "nvim-neorg/neorg",               dependencies = { "luarocks.nvim" }, lazy = false,                                                                       version = "*", config = true, },
-        { "mason-org/mason-lspconfig.nvim", opts = {},                          dependencies = { { "mason-org/mason.nvim", opts = {} }, "neovim/nvim-lspconfig", }, },
-        'airblade/vim-gitgutter',
-        { 'akinsho/toggleterm.nvim', version = 'v1.*' },
-        'dstein64/vim-startuptime',
-        'ellisonleao/dotenv.nvim',
-        'euclidianAce/BetterLua.vim',
-        'f-person/git-blame.nvim',
-        'folke/neodev.nvim',
-        { 'folke/trouble.nvim',      dependencies = 'kyazdani42/nvim-web-devicons' },
-        'goolord/alpha-nvim',
-        'hiphish/rainbow-delimiters.nvim',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-path',
-        'hrsh7th/nvim-cmp',
-        'JuliaEditorSupport/julia-vim',
-        'klen/nvim-config-local',
-        'kyazdani42/nvim-tree.lua',
-        'kyazdani42/nvim-web-devicons',
-        'L3MON4D3/LuaSnip',
-        'lervag/vimtex',
-        'lukas-reineke/indent-blankline.nvim',
-        'mason-org/mason-lspconfig.nvim',
-        'mason-org/mason.nvim',
-        'mbbill/undotree',
-        'mfussenegger/nvim-dap',
-        'mfussenegger/nvim-jdtls',
-        'NeogitOrg/neogit',
-        'neomake/neomake',
-        { 'neovim/nvim-lspconfig' },
-        'numToStr/comment.nvim',
-        'nvim-lua/lsp-status.nvim',
-        'nvim-lua/plenary.nvim',
-        'nvim-lua/popup.nvim',
-        'nvim-lualine/lualine.nvim',
-        { "nvim-neotest/nvim-nio" },
-        'nvim-orgmode/orgmode',
-        'nvim-telescope/telescope-frecency.nvim',
-        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
-        { 'nvim-telescope/telescope.nvim',            dependencies = { 'nvim-lua/plenary.nvim' } },
-        { 'nvim-treesitter/nvim-treesitter',          build = ':TSUpdate' },
-        'nvimtools/none-ls.nvim',
-        'rafamadriz/friendly-snippets',
-        { 'rcarriga/nvim-dap-ui',   dependencies = { 'mfussenegger/nvim-dap' } },
-        'rhysd/git-messenger.vim',
-        'rrethy/nvim-base16',
-        'RRethy/nvim-treesitter-endwise',
-        { 'rush-rs/tree-sitter-asm' },
-        'saadparwaiz1/cmp_luasnip',
-        'theHamsta/nvim-dap-virtual-text',
-        'ThePrimeagen/refactoring.nvim',
-        'tjdevries/nlua.nvim',
-        'tpope/vim-fugitive',
-        'tpope/vim-repeat',
-        'tpope/vim-surround',
-        'windwp/nvim-autopairs',
-        'stevearc/conform.nvim'
-    }
-})
+require("lazy").setup("plugins")
 
 -- makes things load faster
 vim.loader.enable()
 --util keymaps
 
-
--- IMPORTANT: make sure to setup neodev BEFORE lspconfig
-require("neodev").setup({
-    -- add any options here, or leave empty to use the default settings
-})
 -- LSP Config
 local lspconfig = require 'lspconfig'
 -- -- Include the servers you want to have installed by default below
@@ -475,16 +408,6 @@ end
 vim.api.nvim_create_autocmd("TermOpen", { pattern = 'term://*', callback = set_terminal_keymaps })
 
 
--- local configs
-require('config-local').setup {
-    -- Default configuration (optional)
-    config_files = { '.vimrc.lua', '.vimrc', '.dapconfig.lua' }, -- Config file patterns to load (lua supported)
-    hashfile = vim.fn.stdpath 'data' .. '/config-local',         -- Where the plugin keeps files data
-    autocommands_create = true,                                  -- Create autocommands (VimEnter, DirectoryChanged)
-    commands_create = true,                                      -- Create commands (ConfigSource, ConfigEdit, ConfigTrust, ConfigIgnore)
-    silent = true,                                               -- Disable plugin messages (Config loaded/ignored)
-}
-
 -- telescope
 local telescope = require 'telescope'
 local tel_built = require 'telescope.builtin'
@@ -592,42 +515,6 @@ local function set_colorscheme(name)
     end
 end
 
-set_colorscheme(vim.fn.readfile(base16_theme_fname)[1])
-local telescope_actions = require 'telescope.actions'
-local action_state = require 'telescope.actions.state'
-local telescope_action_set = require 'telescope.actions.set'
-
-vim.keymap.set('n', '<leader>fc', function()
-    -- get our base16 colorschemes
-    local colors = vim.fn.getcompletion('base16', 'color')
-    -- we're trying to mimic VSCode so we'll use dropdown theme
-    local theme = require('telescope.themes').get_dropdown()
-    -- create our picker
-    require('telescope.pickers').new(theme, {
-        prompt_title = 'Change Colorscheme',
-        finder = require('telescope.finders').new_table {
-            results = colors,
-        },
-        sorter = require('telescope.config').values.generic_sorter(theme),
-        attach_mappings = function(bufnr)
-            -- change the colors upon selection
-            telescope_actions.select_default:replace(function()
-                set_colorscheme(action_state.get_selected_entry().value)
-                telescope_actions.close(bufnr)
-            end)
-            telescope_action_set.shift_selection:enhance {
-                -- change the colors upon scrolling
-                post = function()
-                    set_colorscheme(action_state.get_selected_entry().value)
-                end,
-            }
-            return true
-        end,
-    }):find()
-end, opts)
-
--- neomake
-vim.cmd "call neomake#configure#automake('w')"
 require 'alpha'
 --alpha-nvim
 local alpha = require 'alpha'
@@ -646,23 +533,6 @@ alpha.setup(dashboard.config)
 -- file explorer
 require('nvim-tree').setup()
 vim.keymap.set('n', '<leader>tf', ':NvimTreeToggle<CR>', opts)
-
--- refactoring
-require('refactoring').setup {}
-opts = { noremap = true, silent = true, expr = false }
-vim.keymap.set('v', '<leader>re', [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]], opts)
-vim.keymap.set(
-    'v',
-    '<leader>rf',
-    [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]],
-    opts
-)
-vim.keymap.set('v', '<leader>rv', [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]], opts)
-vim.keymap.set('v', '<leader>ri', [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], opts)
-vim.keymap.set('n', '<leader>rb', [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]], opts)
-vim.keymap.set('n', '<leader>rbf', [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]], opts)
-
-vim.keymap.set('n', '<leader>ri', [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], opts)
 
 -- trouble
 require('trouble').setup()
@@ -710,22 +580,6 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
-require('orgmode').setup({
-    notifications = { enabled = true },
-    org_agenda_files = '~/notes/*'
-})
-
-
-
-
--- vimtex
-vim.g.vimtex_view_method = "zathura"
-vim.g.vimtex_compiler_method = "latexrun"
--- dotenv
-require('dotenv').setup({
-    enable_on_load = true,
-})
-
 -- conform.nvim
 require("conform").setup({
     formatters_by_ft = {
@@ -735,3 +589,7 @@ require("conform").setup({
         javascript = { "prettier"},
     },
 })
+
+
+-- colorscheme
+vim.cmd.colorscheme "catppuccin"
