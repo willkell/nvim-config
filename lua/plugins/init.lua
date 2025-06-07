@@ -38,6 +38,6 @@ return {
         'tpope/vim-surround',
         'windwp/nvim-autopairs',
         'stevearc/conform.nvim',
-        { "catppuccin/nvim", name = "catppuccin", priority = 1000 }
+        { "phha/zenburn.nvim", priority = 1000 }
     }
 

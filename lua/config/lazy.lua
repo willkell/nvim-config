@@ -15,29 +15,15 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+    defaults = { lazy = true}
+})
 
--- makes things load faster
-vim.loader.enable()
 --util keymaps
 
--- LSP Config
 local lspconfig = require 'lspconfig'
--- -- Include the servers you want to have installed by default below
--- local servers = {
---     'bashls',
---     'pyright',
---     'clangd',
---     'lua_ls',
---     'texlab',
---     'rust_analyzer',
---     'sqlls',
---     'julials',
---     'asm_lsp',
--- }
 
 require("mason").setup()
--- require("mason-lspconfig").setup()
 
 
 local copyConfigFile = function()
@@ -480,6 +466,9 @@ local git_blame = require('gitblame')
 vim.g.gitblame_display_virtual_text = 0
 -- lualine
 require('lualine').setup {
+    options = {
+        theme = "zenburn",
+    },
     sections = {
         lualine_c = {
             {
@@ -492,28 +481,6 @@ require('lualine').setup {
     },
 
 }
-
--- if .colorscheme doesn't exist create it
-if vim.fn.filereadable(vim.fn.stdpath("config") .. '/.colorscheme') == 0 then
-    local f = io.open(vim.fn.stdpath("config") .. '/.colorscheme', "w")
-    f:write("base16-zenburn")
-    f:close()
-end
--- this is our single source of truth created above
-local base16_theme_fname = vim.fn.expand(vim.fn.stdpath("config") .. '/.colorscheme')
--- this function is the only way we should be setting our colorscheme
-local function set_colorscheme(name)
-    -- set Neovim's colorscheme
-    vim.cmd('colorscheme ' .. name)
-    -- if we are using kitty, set kitty colors too
-    if os.getenv("TERM") == 'xterm-kitty' then
-        -- write our colorscheme back to our single source of truth
-        vim.fn.writefile({ name }, base16_theme_fname)
-        -- execute `kitty @ set-colors -c <color>` to change terminal window's
-        -- colors and newly created terminal windows colors
-        os.execute('ln -sf ~/.config/kitty/colors/colors/' .. name .. '.conf ~/.config/kitty/theme.conf')
-    end
-end
 
 require 'alpha'
 --alpha-nvim
@@ -591,5 +558,4 @@ require("conform").setup({
 })
 
 
--- colorscheme
-vim.cmd.colorscheme "catppuccin"
+require("zenburn").setup()
