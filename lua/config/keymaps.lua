@@ -1,0 +1,32 @@
+local opts = { silent = true, remap = false }
+
+vim.keymap.set({ 'n', 'v' }, 'j', 'gj', opts)
+vim.keymap.set({ 'n', 'v' }, 'k', 'gk', opts)
+vim.keymap.set({ 'n', 'v', 'i' }, '<Down>', function()
+    vim.api.nvim_command 'normal gj'
+end, opts)
+vim.keymap.set({ 'n', 'v', 'i' }, '<Up>', function()
+    vim.api.nvim_command 'normal gk'
+end, opts)
+vim.keymap.set('n', '<leader>cl', ':so ' .. vim.fn.stdpath("config") .. '/init.lua<CR>', opts)
+vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
+vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
+vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
+vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
+vim.keymap.set('n', '<leader>en', ':e ' .. vim.fn.stdpath("config") .. '/init.lua<CR>', opts)
+vim.keymap.set('n', '<leader>s', function()
+    vim.api.nvim_command 'write'
+end, opts)
+vim.keymap.set('n', '<leader>Q', ':wqa!<CR>', opts)
+vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
+-- move windows
+vim.keymap.set('n', '<leader>wh', '<c-w>h', opts)
+vim.keymap.set('n', '<leader>wj', '<c-w>j', opts)
+vim.keymap.set('n', '<leader>wk', '<c-w>k', opts)
+vim.keymap.set('n', '<leader>wl', '<c-w>l', opts)
+
+vim.keymap.set('n', 'gf', function()
+  local file = vim.fn.expand('<cfile>')
+  vim.cmd('edit ' .. file)
+end, { noremap = true, silent = true })
+

@@ -29,6 +29,7 @@ else
     nvim_config_home = '/home/' .. output .. '/.config/nvim/'
 end
 require("config.options")
+require("config.keymaps")
 
 
 require('lazy').setup({
@@ -98,31 +99,6 @@ require('lazy').setup({
 -- makes things load faster
 vim.loader.enable()
 --util keymaps
-local opts = { silent = true, remap = false }
-vim.keymap.set({ 'n', 'v' }, 'j', 'gj', opts)
-vim.keymap.set({ 'n', 'v' }, 'k', 'gk', opts)
-vim.keymap.set({ 'n', 'v', 'i' }, '<Down>', function()
-    vim.api.nvim_command 'normal gj'
-end, opts)
-vim.keymap.set({ 'n', 'v', 'i' }, '<Up>', function()
-    vim.api.nvim_command 'normal gk'
-end, opts)
-vim.keymap.set('n', '<leader>cl', ':so ' .. nvim_config_home .. 'init.lua<CR>', opts)
-vim.keymap.set('n', ';;', '<escape>A;<escape>', opts)
-vim.keymap.set('n', ',,', '<escape>A,<escape>', opts)
-vim.keymap.set('n', '\\', '<escape>A \\<escape>', opts)
-vim.keymap.set('n', '<leader>wo', ':only<CR>', opts)
-vim.keymap.set('n', '<leader>en', ':e ' .. nvim_config_home .. 'init.lua<CR>', opts)
-vim.keymap.set('n', '<leader>s', function()
-    vim.api.nvim_command 'write'
-end, opts)
-vim.keymap.set('n', '<leader>Q', ':wqa!<CR>', opts)
-vim.keymap.set('n', '<leader>q', ':wq!<CR>', opts)
--- move windows
-vim.keymap.set('n', '<leader>wh', '<c-w>h', opts)
-vim.keymap.set('n', '<leader>wj', '<c-w>j', opts)
-vim.keymap.set('n', '<leader>wk', '<c-w>k', opts)
-vim.keymap.set('n', '<leader>wl', '<c-w>l', opts)
 
 
 -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
@@ -227,9 +203,6 @@ end
 -- nvim-cmp supports additional completion capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-vim.keymap.set('n', 'gf', function()
-    vim.cmd('edit ' .. vim.fn.expand('<cfile>'))
-end, opts)
 
 -- Enable the following language servers
 -- for _, lsp in ipairs(servers) do
