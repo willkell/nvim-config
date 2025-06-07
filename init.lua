@@ -266,6 +266,10 @@ end
 -- nvim-cmp supports additional completion capabilities
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+vim.keymap.set('n', 'gf', function()
+    vim.cmd('edit ' .. vim.fn.expand('<cfile>'))
+end, opts)
+
 -- Enable the following language servers
 -- for _, lsp in ipairs(servers) do
 --     lspconfig[lsp].setup {
