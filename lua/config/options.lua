@@ -9,7 +9,6 @@ vim.o.relativenumber = true
 vim.o.number = true
 vim.o.errorbells = false
 vim.o.smartindent = true
-vim.o.hlsearch = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.swapfile = false
@@ -18,6 +17,7 @@ vim.o.undodir = vim.fn.stdpath("config") .. "/undodir"
 vim.o.undofile = true
 vim.o.incsearch = true
 vim.o.scrolloff = 6
+vim.o.sidescrolloff = 8
 vim.o.colorcolumn = "100"
 vim.o.signcolumn = "yes"
 vim.g.mapleader = " "
@@ -26,6 +26,8 @@ vim.o.termguicolors = true
 vim.o.mouse = "a"
 vim.o.laststatus = 3
 vim.o.mousemodel = extend
+vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+vim.opt.smoothscroll = true
 
 if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
 	local powershell_options = {

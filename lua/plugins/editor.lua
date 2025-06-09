@@ -22,6 +22,9 @@ return {
 		config = function()
 			local git_blame = require("gitblame")
 			require("lualine").setup({
+                options = {
+                    theme = "zenburn"
+                },
 				sections = {
 					lualine_c = {
 						{
