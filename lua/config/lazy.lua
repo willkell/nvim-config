@@ -17,8 +17,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
 
-local lspconfig = require("lspconfig")
-
 local copyConfigFile = function()
 	local configFile = nvim_config_home .. "dapconfigs/" .. vim.bo.filetype .. ".dapconfig.lua"
 	local dapFile, err = io.open(configFile, "rb")
@@ -42,146 +40,59 @@ local copyOrEditConfigFile = function()
 	vim.cmd([[execute "e .dapconfig.lua"]])
 end
 
-local on_attach = function()
-	--Enable completion triggered by <c-x><c-o>
-	vim.o.omnifunc = "v:lua.vim.lsp.omnifunc"
-	-- Mappings.
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	vim.keymap.set("n", "gD", function()
-		vim.lsp.buf.declaration()
-	end, opts)
-	vim.keymap.set("n", "gd", function()
-		vim.lsp.buf.definition()
-	end, opts)
-	vim.keymap.set("n", "K", function()
-		vim.lsp.buf.hover()
-	end, opts)
-	vim.keymap.set("n", "gi", function()
-		vim.lsp.buf.implementation()
-	end, opts)
-	vim.keymap.set("n", "J", function()
-		vim.lsp.buf.signature_help()
-	end, opts)
-	vim.keymap.set("n", "<leader>wa", function()
-		vim.lsp.buf.add_workspace_folder()
-	end, opts)
-	vim.keymap.set("n", "<leader>wr", function()
-		vim.lsp.buf.remove_workspace_folder()
-	end, opts)
-	vim.keymap.set("n", "<leader>D", function()
-		vim.lsp.buf.type_definition()
-	end, opts)
-	vim.keymap.set("n", "<leader>rn", function()
-		vim.lsp.buf.rename()
-	end, opts)
-	vim.keymap.set("n", "<leader>ca", function()
-		vim.lsp.buf.code_action()
-	end, opts)
-	vim.keymap.set("n", "gr", function()
-		vim.lsp.buf.references()
-	end, opts)
-	vim.keymap.set("n", "<leader>e", function()
-		vim.lsp.diagnostic.show_line_diagnostics()
-	end, opts)
-	vim.keymap.set("n", "[d", function()
-		vim.lsp.diagnostic.goto_prev()
-	end, opts)
-	vim.keymap.set("n", "]d", function()
-		vim.lsp.diagnostic.goto_next()
-	end, opts)
-	vim.keymap.set({ "n", "v" }, "<leader>=", function()
-		require("conform").format()
-	end, opts)
-	vim.keymap.set("n", "<leader>dc", copyOrEditConfigFile, opts)
-end
+--Enable completion triggered by <c-x><c-o>
+vim.o.omnifunc = "v:lua.vim.lsp.omnifunc"
+-- Mappings.
+-- See `:help vim.lsp.*` for documentation on any of the below functions
+vim.keymap.set("n", "gD", function()
+	vim.lsp.buf.declaration()
+end, opts)
+vim.keymap.set("n", "gd", function()
+	vim.lsp.buf.definition()
+end, opts)
+vim.keymap.set("n", "K", function()
+	vim.lsp.buf.hover()
+end, opts)
+vim.keymap.set("n", "gi", function()
+	vim.lsp.buf.implementation()
+end, opts)
+vim.keymap.set("n", "J", function()
+	vim.lsp.buf.signature_help()
+end, opts)
+vim.keymap.set("n", "<leader>wa", function()
+	vim.lsp.buf.add_workspace_folder()
+end, opts)
+vim.keymap.set("n", "<leader>wr", function()
+	vim.lsp.buf.remove_workspace_folder()
+end, opts)
+vim.keymap.set("n", "<leader>D", function()
+	vim.lsp.buf.type_definition()
+end, opts)
+vim.keymap.set("n", "<leader>rn", function()
+	vim.lsp.buf.rename()
+end, opts)
+vim.keymap.set("n", "<leader>ca", function()
+	vim.lsp.buf.code_action()
+end, opts)
+vim.keymap.set("n", "gr", function()
+	vim.lsp.buf.references()
+end, opts)
+vim.keymap.set("n", "<leader>e", function()
+	vim.lsp.diagnostic.show_line_diagnostics()
+end, opts)
+vim.keymap.set("n", "[d", function()
+	vim.lsp.diagnostic.goto_prev()
+end, opts)
+vim.keymap.set("n", "]d", function()
+	vim.lsp.diagnostic.goto_next()
+end, opts)
+vim.keymap.set({ "n", "v" }, "<leader>=", function()
+	require("conform").format()
+end, opts)
+vim.keymap.set("n", "<leader>dc", copyOrEditConfigFile, opts)
 
--- nvim-cmp supports additional completion capabilities
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
--- Enable the following language servers
--- for _, lsp in ipairs(servers) do
---     lspconfig[lsp].setup {
---         on_attach = on_attach(),
---         capabilities = capabilities,
---     }
--- end
-
-require("lspconfig").omnisharp.setup({
-	cmd = { "dotnet", "/usr/lib/omnisharp-roslyn/OmniSharp.dll" },
-	root_dir = lspconfig.util.root_pattern("*.csproj", "*.sln"),
-	on_attach = on_attach(),
-	capabilities = capabilities,
-	-- Additional configuration can be added here
-})
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
-
--- luasnip setup
-local luasnip = require("luasnip")
-
--- nvim-cmp setup
-local cmp = require("cmp")
-local has_words_before = function()
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-cmp.setup({
-	snippet = {
-		-- REQUIRED - you must specify a snippet engine
-		expand = function(args)
-			luasnip.lsp_expand(args.body) -- For `luasnip` users.
-		end,
-	},
-	mapping = {
-		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-		["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-		["<C-e>"] = cmp.mapping({
-			i = cmp.mapping.abort(),
-			c = cmp.mapping.close(),
-		}),
-		["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			elseif has_words_before() then
-				cmp.complete()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-	},
-	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		{ name = "path" },
-		{ name = "buffer" },
-		{ name = "orgmode" },
-	}),
-})
-cmp.setup.filetype("tex", {
-	sources = cmp.config.sources({
-		{ name = "vimtex" },
-	}),
-})
-
--- insert brackets after completion
-local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))
 
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
@@ -216,9 +127,6 @@ table.insert(runtime_path, "lua/?/init.lua")
 --         },
 --     },
 -- }
-
--- LuaSnip
-require("luasnip.loaders.from_vscode").load()
 
 -- dap
 local dap = require("dap")
@@ -492,51 +400,7 @@ alpha.setup(dashboard.config)
 require("nvim-tree").setup()
 vim.keymap.set("n", "<leader>tf", ":NvimTreeToggle<CR>", opts)
 
--- trouble
-require("trouble").setup()
-vim.keymap.set("n", "<leader>xx", ":Trouble<cr>", opts)
-vim.keymap.set("n", "<leader>xw", ":Trouble workspace_diagnostics<cr>", opts)
-vim.keymap.set("n", "<leader>xd", ":Trouble document_diagnostics<cr>", opts)
-vim.keymap.set("n", "<leader>xl", ":Trouble loclist<cr>", opts)
-vim.keymap.set("n", "<leader>xq", ":Trouble quickfix<cr>", opts)
-vim.keymap.set("n", "gR", ":Trouble lsp_references<cr>", opts)
-
--- null-ls
--- local null_ls = require 'null-ls'
--- local sources = {
---     null_ls.builtins.formatting.stylua.with {
---         extra_args = { '--config-path', vim.fn.expand '~/.config/formatters/stylua.toml', '--verify' },
---     },
---     null_ls.builtins.formatting.black,
---     null_ls.builtins.formatting.clang_format.with {
---         extra_args = { '--style', '{BasedOnStyle: LLVM, IndentWidth = 4}' },
---     },
---     null_ls.builtins.diagnostics.cppcheck.with {
---         extra_args = { '--std=c++17', '--language=c++' }
---     },
---     null_ls.builtins.diagnostics.luacheck.with {
---         extra_args = { '--globals', 'vim' },
---     },
---     null_ls.builtins.diagnostics.pylama,
---     null_ls.builtins.formatting.isort.with {
---         extra_args = { '--profile', 'black' },
---     },
---     null_ls.builtins.formatting.rustfmt,
--- }
--- null_ls.setup { sources = sources }
 require("lspconfig").sqlls.setup({})
-
--- Treesitter configuration
-require("nvim-treesitter.configs").setup({
-	-- If TS highlights are not enabled at all, or disabled via `disable` prop,
-	-- highlighting will fallback to default Vim syntax highlighting
-	highlight = {
-		enable = true,
-		-- Required for spellcheck, some LaTex highlights and
-		-- code block highlights that do not have ts grammar
-		additional_vim_regex_highlighting = { "org" },
-	},
-})
 
 -- conform.nvim
 require("conform").setup({
