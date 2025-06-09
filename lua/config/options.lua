@@ -26,7 +26,6 @@ vim.o.termguicolors = true
 vim.o.mouse = 'a'
 vim.o.laststatus = 3
 vim.o.mousemodel = extend
-vim.o.formatexpr = [[v:lua.require("conform").formatexpr()]]
 
 local powershell_options = {
     shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",

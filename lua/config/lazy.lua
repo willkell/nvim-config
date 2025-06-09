@@ -86,9 +86,6 @@ end, opts)
 vim.keymap.set("n", "]d", function()
 	vim.lsp.diagnostic.goto_next()
 end, opts)
-vim.keymap.set({ "n", "v" }, "<leader>=", function()
-	require("conform").format()
-end, opts)
 vim.keymap.set("n", "<leader>dc", copyOrEditConfigFile, opts)
 
 -- Set completeopt to have a better completion experience
