@@ -268,79 +268,12 @@ dap.listeners.after.event_terminated["dapui_config"] = function()
 	end
 	-- vim.cmd ':bd! */bin/sh'
 end
--- toggleterm
-vim.keymap.set("n", "<leader>tt", ":ToggleTerm<CR>", opts)
-local Terminal = require("toggleterm.terminal").Terminal
-local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
 
-function lazygit_toggle()
-	lazygit:toggle()
-end
-
-vim.keymap.set("n", "<leader>gg", lazygit_toggle, opts)
--- keymaps to help terminal navigation
-local function set_terminal_keymaps()
-	local opts = { buffer = 0 }
-	vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
-	vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
-	vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
-	vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
-	vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
-end
-
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*", callback = set_terminal_keymaps })
-
--- telescope
-local telescope = require("telescope")
-local tel_built = require("telescope.builtin")
-telescope.setup()
--- telescope.load_extension 'fzf'
-telescope.load_extension("frecency")
-
--- telescope Mappings
-vim.keymap.set("n", "<leader>ff", tel_built.find_files, opts)
-vim.keymap.set("n", "<leader>fg", tel_built.live_grep, opts)
-vim.keymap.set("n", "<leader>fb", tel_built.buffers, opts)
-vim.keymap.set("n", "<leader>fh", tel_built.help_tags, opts)
-vim.keymap.set("n", "<leader>fr", telescope.extensions.frecency.frecency, opts)
-vim.keymap.set("n", "<leader>ft", tel_built.tags, opts)
-
--- treesitter
-require("nvim-treesitter.configs").setup({
-	highlight = { enable = true },
-	incremental_selection = { enable = true },
-	indent = { enable = true },
-	endwise = { enable = true },
-})
-require("nvim-treesitter.parsers").get_parser_configs().asm = {
-	install_info = {
-		url = "https://github.com/rush-rs/tree-sitter-asm.git",
-		files = { "src/parser.c" },
-		branch = "main",
-	},
-}
-
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.org = {
-	install_info = {
-		url = "https://github.com/milisims/tree-sitter-org",
-		revision = "main",
-		files = { "src/parser.c", "src/scanner.c" },
-	},
-	filetype = "org",
-}
 
 --dap virtual text
 require("nvim-dap-virtual-text").setup({
 	highlight_changed_variables = true,
 	highlight_new_as_changed = true,
-})
-
--- autopairs
-local npairs = require("nvim-autopairs")
-npairs.setup({
-	check_ts = true,
 })
 
 local function lsp_progress()
@@ -357,29 +290,8 @@ local function lsp_progress()
 	local frame = math.floor(ms / 120) % #spinners
 	return table.concat(status, " | ") .. " " .. spinners[frame + 1]
 end
-local git_blame = require("gitblame")
 -- This disables showing of the blame text next to the cursor
 vim.g.gitblame_display_virtual_text = 0
--- lualine
-require("lualine").setup({
-	options = {
-		theme = "zenburn",
-	},
-	sections = {
-		lualine_c = {
-			{
-				"filename",
-				file_status = true,
-				path = 3,
-			},
-		},
-		lualine_x = {
-			{ git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available },
-			"ctime",
-			"filetype",
-		},
-	},
-})
 
 require("alpha")
 --alpha-nvim
@@ -396,9 +308,6 @@ dashboard.section.buttons.val = {
 }
 alpha.setup(dashboard.config)
 
--- file explorer
-require("nvim-tree").setup()
-vim.keymap.set("n", "<leader>tf", ":NvimTreeToggle<CR>", opts)
 
 require("lspconfig").sqlls.setup({})
 
