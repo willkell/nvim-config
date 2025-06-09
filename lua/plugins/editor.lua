@@ -39,7 +39,20 @@ return {
 			})
 		end,
 	},
-	{ "stevearc/conform.nvim", event = "VeryLazy" },
+	{
+		"stevearc/conform.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("conform").setup({
+				formatters_by_ft = {
+					lua = { "stylua" },
+					-- Conform will run multiple formatters sequentially
+					python = { "black" },
+					javascript = { "prettier" },
+				},
+			})
+		end,
+	},
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",

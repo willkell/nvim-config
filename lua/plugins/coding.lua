@@ -66,7 +66,7 @@ return {
 	},
 	{ "rafamadriz/friendly-snippets", event = "VeryLazy" },
 	{ "mfussenegger/nvim-dap", event = "VeryLazy" },
-	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
+	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" }, event = "VeryLazy" },
 	{ "theHamsta/nvim-dap-virtual-text", event = "VeryLazy" },
 	{ "folke/lazydev.nvim", event = "VeryLazy" },
 	{
