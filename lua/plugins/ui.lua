@@ -1,7 +1,27 @@
 return {
-
-	"goolord/alpha-nvim",
-	"hiphish/rainbow-delimiters.nvim",
+	{
+		"goolord/alpha-nvim",
+		config = function()
+			local alpha = require("alpha")
+			local dashboard = require("alpha.themes.dashboard")
+			dashboard.section.buttons.val = {
+				dashboard.button("e", "   New file", ":enew <CR>"),
+				dashboard.button("SPC f f", "   Find file"),
+				dashboard.button("SPC f r", "   Recent files"),
+				dashboard.button("SPC e n", "   Edit Config"),
+				dashboard.button("SPC f h", "   Help"),
+				dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
+			}
+			alpha.setup(dashboard.config)
+		end,
+	},
 	"kyazdani42/nvim-web-devicons",
-	{ "phha/zenburn.nvim", priority = 1000 },
+	{
+		"phha/zenburn.nvim",
+		priority = 1000,
+		config = function()
+			require("zenburn").setup()
+			vim.cmd([[colorscheme zenburn]])
+		end,
+	},
 }

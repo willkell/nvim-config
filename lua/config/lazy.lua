@@ -293,20 +293,6 @@ end
 -- This disables showing of the blame text next to the cursor
 vim.g.gitblame_display_virtual_text = 0
 
-require("alpha")
---alpha-nvim
-local alpha = require("alpha")
-local dashboard = require("alpha.themes.dashboard")
-dashboard.section.buttons.val = {
-	dashboard.button("e", "   New file", ":enew <CR>"),
-	dashboard.button("SPC l s", "   Open last session"),
-	dashboard.button("SPC f f", "   Find file"),
-	dashboard.button("SPC f r", "   Recent files"),
-	dashboard.button("SPC e n", "   Edit Config"),
-	dashboard.button("SPC f h", "   Help"),
-	dashboard.button("q", "   Quit NVIM", ":qa<CR>"),
-}
-alpha.setup(dashboard.config)
 
 
 require("lspconfig").sqlls.setup({})
@@ -321,5 +307,3 @@ require("conform").setup({
 	},
 })
 
-require("zenburn").setup()
-vim.cmd([[colorscheme zenburn]])
