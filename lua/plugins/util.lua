@@ -12,8 +12,8 @@ return {
 		"ellisonleao/dotenv.nvim",
 		config = function()
 			require("dotenv").setup({
-                enable_on_load = true,
-            })
+				enable_on_load = true,
+			})
 		end,
 	},
 	{ "vhyrro/luarocks.nvim", priority = 1000, config = true },

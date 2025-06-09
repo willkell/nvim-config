@@ -72,7 +72,9 @@ return {
 			{ "<leader>tt", ":ToggleTerm<CR>", desc = "Toggle Terminal" },
 			{ "<leader>gg" },
 		},
+		opts = {},
 		config = function()
+			require("toggleterm").setup()
 			local opts = { silent = true, remap = false }
 			local Terminal = require("toggleterm.terminal").Terminal
 			local lazygit = Terminal:new({
@@ -108,6 +110,12 @@ return {
 
 			-- if you only want these mappings for toggle term use term://*toggleterm#* instead
 			vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*", callback = set_terminal_keymaps })
+			vim.api.nvim_create_autocmd("TermEnter", {
+				pattern = "term://",
+				callback = function()
+					vim.cmd("startinsert!")
+				end,
+			})
 		end,
 	},
 	{
