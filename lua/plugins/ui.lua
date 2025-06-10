@@ -15,7 +15,7 @@ return {
 			alpha.setup(dashboard.config)
 		end,
 	},
-	"kyazdani42/nvim-web-devicons",
+	{ "kyazdani42/nvim-web-devicons", Lazy = "true" },
 	{
 		"phha/zenburn.nvim",
 		priority = 1000,
