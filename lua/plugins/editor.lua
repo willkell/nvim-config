@@ -87,8 +87,7 @@ return {
 				on_open = function(term)
 					vim.cmd("startinsert!")
 					-- since escape has functionality in the window delete it
-					vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<Esc>", "<Nop", { noremap = true, silent = true }
-)
+					vim.api.nvim_buf_del_keymap(term.bufnr, "t", "<Esc>")
 					-- since we still want a way to quit the application
 					vim.api.nvim_buf_set_keymap(
 						term.bufnr,
