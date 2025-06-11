@@ -1,5 +1,51 @@
 return {
-	{ "neovim/nvim-lspconfig", event = "VeryLazy" },
+	{
+		"neovim/nvim-lspconfig",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local lspconfig = require("lspconfig")
+			lspconfig.lua_ls.setup({
+				settings = {
+					Lua = {
+						runtime = {
+							version = "LuaJIT",
+						},
+						diagnostics = {
+							globals = { "vim" }, -- <--- THIS IS THE KEY LINE
+						},
+						workspace = {
+							-- Tell the language server to find Lua files in Neovim runtime and lazy.nvim folders
+							library = {
+								vim.env.VIMRUNTIME,
+								vim.fn.stdpath("config"),
+								-- If you use lazy.nvim, you might want to add its root
+								-- This will help LuaLS find definitions in your installed plugins
+								vim.fn.stdpath("data") .. "/lazy",
+							},
+							checkThirdParty = false,
+						},
+					},
+				},
+			})
+			-- LspAttach is where you enable features that only work
+			-- if there is a language server active in the file
+			vim.api.nvim_create_autocmd("LspAttach", {
+				desc = "LSP actions",
+				callback = function(event)
+					local opts = { buffer = event.buf }
+					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+					vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
+					vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
+					vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
+					vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
+					vim.keymap.set("n", "gx", "<cmd>lua vim.diagnostic.get()<cr>", opts)
+					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+					vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+					vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+				end,
+			})
+		end,
+	},
 	{ "mason-org/mason.nvim", opts = {}, event = "VeryLazy" },
 	{
 		"mason-org/mason-lspconfig.nvim",
@@ -68,7 +114,7 @@ return {
 	{ "mfussenegger/nvim-dap", event = "VeryLazy" },
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" }, event = "VeryLazy" },
 	{ "theHamsta/nvim-dap-virtual-text", event = "VeryLazy" },
-	{ "folke/lazydev.nvim", event = "VeryLazy" },
+	{ "folke/lazydev.nvim", ft = "lua" },
 	{
 		"folke/trouble.nvim",
 		opts = {}, -- for default options, refer to the configuration section for custom setup.
