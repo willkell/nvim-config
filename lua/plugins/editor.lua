@@ -13,14 +13,14 @@ return {
 
 		config = function()
 			require("nvim-tree").setup({
-                git = {
-                    enable = true,
-                    timeout = 10000,
-                },
-                filters = {
-                    git_ignored = false,
-                }
-            })
+				git = {
+					enable = true,
+					timeout = 10000,
+				},
+				filters = {
+					git_ignored = false,
+				},
+			})
 		end,
 	},
 	{
@@ -31,9 +31,9 @@ return {
 		config = function()
 			local git_blame = require("gitblame")
 			require("lualine").setup({
-                options = {
-                    theme = "zenburn"
-                },
+				options = {
+					theme = "zenburn",
+				},
 				sections = {
 					lualine_c = {
 						{
@@ -82,44 +82,11 @@ return {
 		version = "*",
 		keys = {
 			{ "<leader>tt", ":ToggleTerm<CR>", desc = "Toggle Terminal" },
-			{ "<leader>gg" },
 		},
 		opts = {},
 		config = function()
 			require("toggleterm").setup()
 			local opts = { silent = true, remap = false }
-			local Terminal = require("toggleterm.terminal").Terminal
-			local lazygit = Terminal:new({
-				cmd = "lazygit",
-				hidden = true,
-				direction = "float",
-				on_open = function(term)
-					vim.cmd("startinsert!")
-					-- since escape has functionality in the window delete it
-					vim.api.nvim_buf_del_keymap(term.bufnr, "t", "<Esc>")
-					-- since we still want a way to quit the application
-					vim.api.nvim_buf_set_keymap(
-						term.bufnr,
-						"t",
-						"<C-q>",
-						"<cmd>close<CR>",
-						{ noremap = true, silent = true }
-					)
-					vim.api.nvim_buf_set_keymap(
-						term.bufnr,
-						"t",
-						"<C-c>",
-						"<cmd>close<CR>",
-						{ noremap = true, silent = true }
-					)
-				end,
-			})
-
-			function lazygit_toggle()
-				lazygit:toggle()
-			end
-
-			vim.keymap.set("n", "<leader>gg", lazygit_toggle, opts)
 			-- keymaps to help terminal navigation
 			local function set_terminal_keymaps()
 				local opts = { buffer = 0 }

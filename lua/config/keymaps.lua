@@ -38,8 +38,8 @@ map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- Clear search and stop snippet on escape
 map({ "i", "n", "s" }, "<esc>", function()
-  vim.cmd("noh")
-  return "<esc>"
+	vim.cmd("noh")
+	return "<esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
 
 -- Add undo break-points
@@ -59,7 +59,6 @@ map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 
-
 map("n", ";;", "<escape>A;<escape>", opts)
 map("n", ",,", "<escape>A,<escape>", opts)
 map("n", "\\", "<escape>A \\<escape>", opts)
@@ -71,11 +70,13 @@ end, opts)
 map("n", "<leader>qq", "<cmd>qa<cr>", opts)
 map("n", "<leader>wq", "<cmd>xa<cr>", opts)
 
-
-
 map("n", "gf", function()
 	local file = vim.fn.expand("<cfile>")
 	vim.cmd("edit " .. file)
 end, { noremap = true, silent = true })
 
 map("n", "<leader>tf", ":NvimTreeToggle<CR>", opts)
+
+local utils = require("utils")
+map("n", "<leader>ww", function() vim.api.nvim_echo({ { utils.git_root() } }, true, {}) end, opts)
+vim.o.autochdir = true
