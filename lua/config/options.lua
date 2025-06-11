@@ -46,3 +46,6 @@ if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
 		vim.opt[option] = value
 	end
 end
+
+-- statusline
+vim.opt.statuscolumn = "%!" .. "require('snacks.statuscolumn').get()" .. "!%"

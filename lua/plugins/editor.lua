@@ -5,7 +5,7 @@ return {
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
-		Lazy = "false",
+		lazy = "false",
 		Priority = 700,
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
@@ -26,7 +26,7 @@ return {
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
-		Lazy = false,
+		lazy = false,
 		Priority = 100,
 		config = function()
 			local git_blame = require("gitblame")
@@ -146,5 +146,21 @@ return {
 		ft = ".norg",
 		version = "*",
 		config = true,
+	},
+	{
+		"kevinhwang91/nvim-ufo",
+		dependencies = "kevinhwang91/promise-async",
+		event = "VeryLazy",
+		config = function()
+			vim.o.foldcolumn = "1" -- '0' is not bad
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+			require("ufo").setup()
+
+			-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+		end,
 	},
 }
