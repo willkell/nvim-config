@@ -28,6 +28,9 @@ vim.o.laststatus = 3
 vim.o.mousemodel = extend
 vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 vim.opt.smoothscroll = true
+-- disable netrw for nvimtree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
 	local powershell_options = {

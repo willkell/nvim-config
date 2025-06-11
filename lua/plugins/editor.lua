@@ -10,8 +10,17 @@ return {
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		},
+
 		config = function()
-			require("nvim-tree").setup({})
+			require("nvim-tree").setup({
+                git = {
+                    enable = true,
+                    timeout = 10000,
+                },
+                filters = {
+                    git_ignored = false,
+                }
+            })
 		end,
 	},
 	{
