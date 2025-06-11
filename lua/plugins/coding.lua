@@ -64,7 +64,7 @@ return {
 		},
 		opts_extend = { "sources.default" },
 	},
-	{ "rafamadriz/friendly-snippets", event = "VeryLazy" },
+	{ "rafamadriz/friendly-snippets", event = "InsertEnter" },
 	{ "mfussenegger/nvim-dap", event = "VeryLazy" },
 	{ "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" }, event = "VeryLazy" },
 	{ "theHamsta/nvim-dap-virtual-text", event = "VeryLazy" },
@@ -130,37 +130,14 @@ return {
 		end,
 	},
 	{
-		"saghen/blink.pairs",
-		version = "*", -- (recommended) only required with prebuilt binaries
-		event = "VeryLazy",
-
-		-- download prebuilt binaries from github releases
-		dependencies = "saghen/blink.download",
-
-		--- @module 'blink.pairs'
-		--- @type blink.pairs.Config
-		opts = {
-			mappings = {
-				-- you can call require("blink.pairs.mappings").enable() and require("blink.pairs.mappings").disable() to enable/disable mappings at runtime
-				enabled = true,
-			},
-			highlights = {
-				enabled = true,
-				groups = {
-					"BlinkPairsOrange",
-					"BlinkPairsPurple",
-					"BlinkPairsBlue",
-				},
-				matchparen = {
-					enabled = true,
-					group = "MatchParen",
-				},
-			},
-			debug = false,
-		},
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
 	},
+	{ "HiPhish/rainbow-delimiters.nvim", event = "BufReadPre" },
 	{
 		"windwp/nvim-ts-autotag",
+		event = "InsertEnter",
 		config = function()
 			require("nvim-ts-autotag").setup()
 		end,

@@ -67,8 +67,11 @@ map("n", "<leader>en", ":e " .. vim.fn.stdpath("config") .. "/init.lua<CR>", opt
 map("n", "<leader>s", function()
 	vim.api.nvim_command("write")
 end, opts)
-map("n", "<leader>Q", ":wqa!<CR>", opts)
-map("n", "<leader>q", ":wq!<CR>", opts)
+-- easy quit
+map("n", "<leader>qq", "<cmd>qa<cr>", opts)
+map("n", "<leader>wq", "<cmd>xa<cr>", opts)
+
+
 
 map("n", "gf", function()
 	local file = vim.fn.expand("<cfile>")

@@ -26,7 +26,7 @@ return {
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
-		Lazy = "false",
+		Lazy = false,
 		Priority = 100,
 		config = function()
 			local git_blame = require("gitblame")
