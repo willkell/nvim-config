@@ -76,7 +76,3 @@ map("n", "gf", function()
 end, { noremap = true, silent = true })
 
 map("n", "<leader>tf", ":NvimTreeToggle<CR>", opts)
-
-local utils = require("utils")
-map("n", "<leader>ww", function() vim.api.nvim_echo({ { utils.git_root() } }, true, {}) end, opts)
-vim.o.autochdir = true
