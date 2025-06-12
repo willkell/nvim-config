@@ -44,40 +44,6 @@ end
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
 
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
--- require('lspconfig').lua_ls.setup {
---     on_attach = on_attach(),
---     capabilities = capabilities,
---     settings = {
---         Lua = {
---             runtime = {
---                 -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
---                 version = 'LuaJIT',
---                 -- Setup your lua path
---                 path = '/usr/bin/lua',
---             },
---             diagnostics = {
---                 -- Get the language server to recognize the `vim` global
---                 globals = { 'vim' },
---             },
---             workspace = {
---                 -- Make the server aware of Neovim runtime files
---                 checkThirdParty = false,
---                 library = vim.api.nvim_get_runtime_file('', true),
---                 preloadFileSize = 2000000,
---             },
---             telemetry = {
---                 enable = true,
---             },
---             completion = {
---                 callSnipped = "Replace"
---             }
---         },
---     },
--- }
-
 -- dap
 local dap = require("dap")
 dap.adapters.cppdbg = {
@@ -227,9 +193,3 @@ require("nvim-dap-virtual-text").setup({
 })
 
 vim.g.gitblame_display_virtual_text = 0
-
-
-
-require("lspconfig").sqlls.setup({})
-
-

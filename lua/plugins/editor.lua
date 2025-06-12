@@ -1,7 +1,9 @@
+local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
+
 return {
-	{ "numToStr/comment.nvim", opts = {}, event = "VeryLazy" },
-	{ "tpope/vim-repeat", event = "VeryLazy" },
-	{ "tpope/vim-surround", event = "VeryLazy" },
+	{ "numToStr/comment.nvim", opts = {}, event = enterFileEvent },
+	{ "tpope/vim-repeat", event = enterFileEvent },
+	{ "tpope/vim-surround", event = enterFileEvent },
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
@@ -20,7 +22,7 @@ return {
 				filters = {
 					git_ignored = false,
 				},
-                sync_root_with_cwd = true,
+				sync_root_with_cwd = true,
 			})
 		end,
 	},
@@ -151,7 +153,7 @@ return {
 	{
 		"kevinhwang91/nvim-ufo",
 		dependencies = "kevinhwang91/promise-async",
-		event = "VeryLazy",
+		event = enterFileEvent,
 		config = function()
 			vim.o.foldcolumn = "1" -- '0' is not bad
 			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

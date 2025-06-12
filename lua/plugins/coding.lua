@@ -1,7 +1,9 @@
+local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
+
 return {
 	{
 		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
+		event = enterFileEvent,
 		config = function()
 			local lspconfig = require("lspconfig")
 			lspconfig.lua_ls.setup({
@@ -155,7 +157,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		branch = "master",
-		lazy = false,
+        event = enterFileEvent,
 		build = ":TSUpdate",
 		config = function()
 			require("nvim-treesitter.configs").setup({
@@ -180,7 +182,7 @@ return {
 		event = "InsertEnter",
 		config = true,
 	},
-	{ "HiPhish/rainbow-delimiters.nvim", event = "BufReadPre" },
+	{ "HiPhish/rainbow-delimiters.nvim", event = enterFileEvent },
 	{
 		"windwp/nvim-ts-autotag",
 		event = "InsertEnter",

@@ -1,5 +1,8 @@
+local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
+
+
 return {
-	{ "lewis6991/gitsigns.nvim", event = "VeryLazy" },
+	{ "lewis6991/gitsigns.nvim", event = enterFileEvent },
 	{ "f-person/git-blame.nvim", lazy = true },
 	{ "tpope/vim-fugitive", event = "CmdLineEnter" },
 	{
