@@ -8,7 +8,7 @@ return {
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
 		lazy = false,
-		Priority = 700,
+		priority = 700,
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		},
@@ -30,7 +30,7 @@ return {
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
 		lazy = false,
-		Priority = 100,
+		priority = 100,
 		config = function()
 			local git_blame = require("gitblame")
 			require("lualine").setup({
