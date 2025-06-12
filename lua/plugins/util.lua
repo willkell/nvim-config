@@ -37,6 +37,7 @@ return {
 			},
 		},
 		lazy = false,
+        priority = 1000,
     -- stylua: ignore
         keys = {
           { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
