@@ -1,9 +1,9 @@
 local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
 
 return {
-	{ "numToStr/comment.nvim", opts = {}, event = enterFileEvent },
-	{ "tpope/vim-repeat", event = enterFileEvent },
-	{ "tpope/vim-surround", event = enterFileEvent },
+	{ "numToStr/comment.nvim", opts = {}, event = "VeryLazy" },
+	{ "tpope/vim-repeat", event = "VeryLazy" },
+	{ "tpope/vim-surround", event = "VeryLazy" },
 	{
 		"nvim-tree/nvim-tree.lua",
 		version = "*",
