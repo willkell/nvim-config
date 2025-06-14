@@ -36,8 +36,16 @@ return {
 				refresh = 50, -- refresh at most every 50ms
 			},
 		},
+			init = function()
+				vim.api.nvim_create_autocmd({"BufReadPost", "BufWritePost"}, {
+					callback = function()
+                        local git_root = Snacks.git.get_root()
+                        vim.api.nvim_set_current_dir(git_root)
+					end,
+				})
+			end,
 		lazy = false,
-        priority = 1000,
+		priority = 1000,
     -- stylua: ignore
         keys = {
           { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
