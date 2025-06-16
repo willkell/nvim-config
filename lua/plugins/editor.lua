@@ -70,6 +70,7 @@ return {
 		},
 		config = function()
 			require("conform").setup({
+				formatexpr = "v:lua.require'conform'.formatexpr()",
 				formatters_by_ft = {
 					lua = { "stylua" },
 					-- Conform will run multiple formatters sequentially
@@ -172,4 +173,8 @@ return {
             require('leap').set_default_mappings()
         end
     }
+{    "nvim-treesitter/nvim-treesitter-context",
+    opts = {},
+    event = enterFileEvent,
+}
 }
