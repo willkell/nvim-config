@@ -167,14 +167,11 @@ return {
 			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 		end,
 	},
-    {
-        "ggandor/leap.nvim",
-        config = function ()
-            require('leap').set_default_mappings()
-        end
-    }
-{    "nvim-treesitter/nvim-treesitter-context",
-    opts = {},
-    event = enterFileEvent,
-}
+	{
+		"ggandor/leap.nvim",
+		config = function()
+			require("leap").set_default_mappings()
+		end,
+	},
+	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, event = enterFileEvent },
 }

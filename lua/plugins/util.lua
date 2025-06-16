@@ -36,17 +36,17 @@ return {
 				refresh = 50, -- refresh at most every 50ms
 			},
 		},
-			init = function()
-				vim.api.nvim_create_autocmd({"BufReadPost", "BufWritePost"}, {
-					callback = function()
-                        local git_root = Snacks.git.get_root()
-                        vim.api.nvim_set_current_dir(git_root)
-					end,
-				})
-			end,
+		init = function()
+			vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+				callback = function()
+					local git_root = Snacks.git.get_root()
+					vim.api.nvim_set_current_dir(git_root)
+				end,
+			})
+		end,
 		lazy = false,
 		priority = 1000,
-    -- stylua: ignore
+        -- stylua: ignore
         keys = {
           { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
           { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
@@ -58,12 +58,19 @@ return {
 		"folke/persistence.nvim",
 		event = "BufReadPre",
 		opts = {},
-    -- stylua: ignore
-    keys = {
-      { "<leader>qs", function() require("persistence").load() end, desc = "Restore Session" },
-      { "<leader>qS", function() require("persistence").select() end,desc = "Select Session" },
-      { "<leader>ql", function() require("persistence").load({ last = true }) end, desc = "Restore Last Session" },
-      { "<leader>qd", function() require("persistence").stop() end, desc = "Don't Save Current Session" },
-    },
+        -- stylua: ignore
+        keys = {
+          { "<leader>qs", function() require("persistence").load() end, desc = "Restore Session" },
+          { "<leader>qS", function() require("persistence").select() end,desc = "Select Session" },
+          { "<leader>ql", function() require("persistence").load({ last = true }) end, desc = "Restore Last Session" },
+          { "<leader>qd", function() require("persistence").stop() end, desc = "Don't Save Current Session" },
+        },
+	},
+	{
+		"echasnovski/mini.nvim",
+		version = false,
+		config = function()
+			require("mini.ai").setup()
+		end,
 	},
 }
