@@ -77,6 +77,7 @@ return {
 					python = { "black" },
 					javascript = { "prettier" },
 					typescriptreact = { "prettier" },
+					html = { "prettier" },
 				},
 			})
 		end,
@@ -174,4 +175,11 @@ return {
 		end,
 	},
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, event = enterFileEvent },
+	{
+		"nmac427/guess-indent.nvim",
+		event = enterFileEvent,
+		config = function()
+			require("guess-indent").setup({})
+		end,
+	},
 }
