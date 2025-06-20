@@ -178,6 +178,10 @@ return {
 		end,
 	},
 	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		event = enterFileEvent,
+	},
+	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		config = true,
@@ -193,7 +197,7 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		event = enterFileEvent,
-		dependencies = {"HiPhish/rainbow-delimiters.nvim"},
+		dependencies = { "HiPhish/rainbow-delimiters.nvim" },
 		main = "ibl",
 		---@module "ibl"
 		---@type ibl.config

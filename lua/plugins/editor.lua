@@ -5,26 +5,20 @@ return {
 	{ "tpope/vim-repeat", event = "VeryLazy" },
 	{ "tpope/vim-surround", event = "VeryLazy" },
 	{
-		"nvim-tree/nvim-tree.lua",
-		version = "*",
-		lazy = false,
-		priority = 700,
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
 		dependencies = {
-			"nvim-tree/nvim-web-devicons",
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+			-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
-
-		config = function()
-			require("nvim-tree").setup({
-				git = {
-					enable = true,
-					timeout = 10000,
-				},
-				filters = {
-					git_ignored = false,
-				},
-				sync_root_with_cwd = true,
-			})
-		end,
+		lazy = false, -- neo-tree will lazily load itself
+		---@module "neo-tree"
+		---@type neotree.Config?
+		opts = {
+			-- fill any relevant options here
+		},
 	},
 	{
 		"nvim-lualine/lualine.nvim",
@@ -180,6 +174,14 @@ return {
 		event = enterFileEvent,
 		config = function()
 			require("guess-indent").setup({})
+		end,
+	},
+	{
+		"akinsho/bufferline.nvim",
+		version = "*",
+		dependencies = "nvim-tree/nvim-web-devicons",
+		config = function()
+			require("bufferline").setup()
 		end,
 	},
 }
