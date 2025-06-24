@@ -74,5 +74,3 @@ map("n", "gf", function()
 	local file = vim.fn.expand("<cfile>")
 	vim.cmd("edit " .. file)
 end, { noremap = true, silent = true })
-
-map("n", "<leader>tf", ":NvimTreeToggle<CR>", opts)

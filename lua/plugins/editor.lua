@@ -9,16 +9,35 @@ return {
 		branch = "v3.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
-			-- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
-		lazy = false, -- neo-tree will lazily load itself
+		keys = {
+			{
+				"<leader>tf",
+				function()
+					require("neo-tree.command").execute({ toggle = true })
+				end,
+			},
+			{
+				"<leader>tg",
+				function()
+					require("neo-tree.command").execute({ source = "git_status", toggle = true })
+				end,
+				desc = "Git Explorer",
+			},
+			{
+				"<leader>tb",
+				function()
+					require("neo-tree.command").execute({ source = "buffers", toggle = true })
+				end,
+				desc = "Buffer Explorer",
+			},
+		},
+		lazy = false,
 		---@module "neo-tree"
 		---@type neotree.Config?
-		opts = {
-			-- fill any relevant options here
-		},
+		opts = {},
 	},
 	{
 		"nvim-lualine/lualine.nvim",
@@ -45,7 +64,7 @@ return {
 					},
 					lualine_y = {
 						"lsp_status",
-					}
+					},
 				},
 			})
 		end,

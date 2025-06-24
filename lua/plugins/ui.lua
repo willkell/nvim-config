@@ -57,6 +57,11 @@ return {
 						enabled = true,
 					},
 					lsp_trouble = true,
+					indent_blankline = {
+						enabled = true,
+						scope_color = "", -- catppuccin color (eg. `lavender`) Default: text
+						colored_indent_levels = false,
+					},
 				},
 			})
 			vim.cmd([[colorscheme catppuccin]])

@@ -25,7 +25,7 @@ vim.g.maplocalleader = " "
 vim.o.termguicolors = true
 vim.o.mouse = "a"
 vim.o.laststatus = 3
-vim.o.mousemodel = extend
+vim.o.mousemodel = "extend"
 vim.opt.smoothscroll = true
 -- disable netrw for nvimtree
 vim.g.loaded_netrw = 1
