@@ -33,7 +33,33 @@ return {
 	-- 		vim.cmd([[colorscheme tokyonight]])
 	-- 	end,
 	-- },
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000, config = function ()
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
 			vim.cmd([[colorscheme catppuccin]])
-	end}
+			require("catppuccin").setup({
+				integrations = {
+					alpha = true,
+					blink_cmp = {
+						style = "bordered",
+					},
+					gitsigns = true,
+					leap = true,
+					mason = true,
+					neotree = true,
+					dap = true,
+					dap_ui = true,
+					nvim_surround = true,
+					ufo = true,
+					rainbow_delimiters = true,
+					telescope = {
+						enabled = true,
+					},
+					lsp_trouble = true,
+				},
+			})
+		end,
+	},
 }
