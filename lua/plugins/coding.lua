@@ -152,6 +152,34 @@ return {
 				"<cmd>Trouble qflist toggle<cr>",
 				desc = "Quickfix List (Trouble)",
 			},
+			{
+				"[q",
+				function()
+					if require("trouble").is_open() then
+						require("trouble").prev({ skip_groups = true, jump = true })
+					else
+						local ok, err = pcall(vim.cmd.cprev)
+						if not ok then
+							vim.notify(err, vim.log.levels.ERROR)
+						end
+					end
+				end,
+				desc = "Previous Trouble/Quickfix Item",
+			},
+			{
+				"]q",
+				function()
+					if require("trouble").is_open() then
+						require("trouble").next({ skip_groups = true, jump = true })
+					else
+						local ok, err = pcall(vim.cmd.cnext)
+						if not ok then
+							vim.notify(err, vim.log.levels.ERROR)
+						end
+					end
+				end,
+				desc = "Next Trouble/Quickfix Item",
+			},
 		},
 	},
 	{
@@ -165,6 +193,7 @@ return {
 					enable = true,
 					additional_vim_regex_highlighting = true,
 				},
+				indent = { enable = true },
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -174,12 +203,45 @@ return {
 						node_decremental = "<S-TAB>",
 					},
 				},
+				textobjects = {
+					move = {
+						enable = true,
+						goto_next_start = {
+							["]f"] = "@function.outer",
+							["]c"] = "@class.outer",
+							["]a"] = "@parameter.inner",
+						},
+						goto_next_end = {
+							["]F"] = "@function.outer",
+							["]C"] = "@class.outer",
+							["]A"] = "@parameter.inner",
+						},
+						goto_previous_start = {
+							["[f"] = "@function.outer",
+							["[c"] = "@class.outer",
+							["[a"] = "@parameter.inner",
+						},
+						goto_previous_end = {
+							["[F"] = "@function.outer",
+							["[C"] = "@class.outer",
+							["[A"] = "@parameter.inner",
+						},
+					},
+				},
 			})
 		end,
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		event = enterFileEvent,
+		config = function()
+			local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+
+			-- Repeat movement with ; and ,
+			-- ensure ; goes forward and , goes backward regardless of the last direction
+			vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+			vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
+		end,
 	},
 	{
 		"windwp/nvim-autopairs",
@@ -189,10 +251,8 @@ return {
 	{ "HiPhish/rainbow-delimiters.nvim", event = enterFileEvent },
 	{
 		"windwp/nvim-ts-autotag",
-		event = "InsertEnter",
-		config = function()
-			require("nvim-ts-autotag").setup()
-		end,
+		event = "VeryLazy",
+		opts = {},
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
@@ -229,6 +289,41 @@ return {
 			require("ibl").setup({ scope = { highlight = highlight } })
 
 			hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
+		end,
+	},
+	-- Better text-objects
+	{
+		"echasnovski/mini.ai",
+		event = "VeryLazy",
+		opts = function()
+			local ai = require("mini.ai")
+			return {
+				n_lines = 500,
+				custom_textobjects = {
+					o = ai.gen_spec.treesitter({ -- code block
+						a = { "@block.outer", "@conditional.outer", "@loop.outer" },
+						i = { "@block.inner", "@conditional.inner", "@loop.inner" },
+					}),
+					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }), -- function
+					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }), -- class
+					t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- tags
+					d = { "%f[%d]%d+" }, -- digits
+					e = { -- Word with case
+						{
+							"%u[%l%d]+%f[^%l%d]",
+							"%f[%S][%l%d]+%f[^%l%d]",
+							"%f[%P][%l%d]+%f[^%l%d]",
+							"^[%l%d]+%f[^%l%d]",
+						},
+						"^().*()$",
+					},
+					u = ai.gen_spec.function_call(), -- u for "Usage"
+					U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }), -- without dot in function name
+				},
+			}
+		end,
+		config = function(_, opts)
+			require("mini.ai").setup(opts)
 		end,
 	},
 }

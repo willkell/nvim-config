@@ -66,11 +66,4 @@ return {
           { "<leader>qd", function() require("persistence").stop() end, desc = "Don't Save Current Session" },
         },
 	},
-	{
-		"echasnovski/mini.nvim",
-		version = false,
-		config = function()
-			require("mini.ai").setup()
-		end,
-	},
 }
