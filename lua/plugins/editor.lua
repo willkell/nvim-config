@@ -36,14 +36,16 @@ return {
 						{
 							"filename",
 							file_status = true,
-							path = 3,
+							path = 4,
 						},
 					},
 					lualine_x = {
 						{ git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available },
-						"ctime",
 						"filetype",
 					},
+					lualine_y = {
+						"lsp_status",
+					}
 				},
 			})
 		end,
