@@ -26,7 +26,6 @@ vim.o.termguicolors = true
 vim.o.mouse = "a"
 vim.o.laststatus = 3
 vim.o.mousemodel = extend
-vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 vim.opt.smoothscroll = true
 -- disable netrw for nvimtree
 vim.g.loaded_netrw = 1
