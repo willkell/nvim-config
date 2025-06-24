@@ -38,7 +38,6 @@ return {
 		name = "catppuccin",
 		priority = 1000,
 		config = function()
-			vim.cmd([[colorscheme catppuccin]])
 			require("catppuccin").setup({
 				integrations = {
 					alpha = true,
@@ -60,6 +59,7 @@ return {
 					lsp_trouble = true,
 				},
 			})
+			vim.cmd([[colorscheme catppuccin]])
 		end,
 	},
 }
