@@ -15,7 +15,20 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"gzip",
+				"netrwPlugin",
+				"tarPlugin",
+				"tohtml",
+				"tutor",
+				"zipPlugin",
+			},
+		},
+	},
+})
 
 local copyConfigFile = function()
 	local configFile = nvim_config_home .. "dapconfigs/" .. vim.bo.filetype .. ".dapconfig.lua"
@@ -39,7 +52,6 @@ local copyOrEditConfigFile = function()
 	end
 	vim.cmd([[execute "e .dapconfig.lua"]])
 end
-
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
@@ -184,7 +196,6 @@ dap.listeners.after.event_terminated["dapui_config"] = function()
 	end
 	-- vim.cmd ':bd! */bin/sh'
 end
-
 
 --dap virtual text
 require("nvim-dap-virtual-text").setup({
