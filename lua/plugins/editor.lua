@@ -12,6 +12,7 @@ return {
 			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
 		},
+		cmd = "Neotree",
 		keys = {
 			{
 				"<leader>tf",
@@ -34,7 +35,25 @@ return {
 				desc = "Buffer Explorer",
 			},
 		},
-		lazy = false,
+		init = function()
+			-- FIX: use `autocmd` for lazy-loading neo-tree instead of directly requiring it,
+			-- because `cwd` is not set up properly.
+			vim.api.nvim_create_autocmd("BufEnter", {
+				group = vim.api.nvim_create_augroup("Neotree_start_directory", { clear = true }),
+				desc = "Start Neo-tree with directory",
+				once = true,
+				callback = function()
+					if package.loaded["neo-tree"] then
+						return
+					else
+						local stats = vim.uv.fs_stat(vim.fn.argv(0))
+						if stats and stats.type == "directory" then
+							require("neo-tree")
+						end
+					end
+				end,
+			})
+		end,
 		---@module "neo-tree"
 		---@type neotree.Config?
 		opts = {},
@@ -42,13 +61,25 @@ return {
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
-		lazy = false,
-		priority = 100,
+		event = "VeryLazy",
+		init = function()
+			vim.g.lualine_laststatus = vim.o.laststatus
+			if vim.fn.argc(-1) > 0 then
+				-- set an empty statusline till lualine loads
+				vim.o.statusline = " "
+			else
+				-- hide the statusline on the starter page
+				vim.o.laststatus = 0
+			end
+		end,
 		config = function()
 			local git_blame = require("gitblame")
+			vim.o.laststatus = vim.g.lualine_laststatus
 			require("lualine").setup({
 				options = {
 					theme = "catppuccin",
+					globalstatus = vim.o.laststatus == 3,
+					disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
 				},
 				sections = {
 					lualine_c = {
@@ -66,6 +97,7 @@ return {
 						"lsp_status",
 					},
 				},
+				extensions = { "lazy", "mason", "neo-tree", "toggleterm", "trouble" },
 			})
 		end,
 	},
@@ -152,8 +184,8 @@ return {
 			telescope.load_extension("frecency")
 
 			-- telescope Mappings
-			vim.keymap.set("n", "<leader>ff", tel_built.git_files, opts)
-			vim.keymap.set("n", "<leader>fF", tel_built.find_files, opts)
+			vim.keymap.set("n", "<leader>ff", tel_built.find_files, opts)
+			vim.keymap.set("n", "<leader>fF", tel_built.git_files, opts)
 			vim.keymap.set("n", "<leader>fg", tel_built.live_grep, opts)
 			vim.keymap.set("n", "<leader>fb", tel_built.buffers, opts)
 			vim.keymap.set("n", "<leader>fh", tel_built.help_tags, opts)
@@ -199,8 +231,16 @@ return {
 	},
 	{
 		"akinsho/bufferline.nvim",
+		event = "VeryLazy",
 		version = "*",
 		dependencies = "nvim-tree/nvim-web-devicons",
+		opts = {
+			options = {
+				always_show_bufferline = false,
+				diagnostics = "nvim_lsp",
+				diagnostics_update_on_event = true,
+			}
+		},
 		config = function()
 			require("bufferline").setup()
 		end,
