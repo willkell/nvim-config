@@ -22,6 +22,7 @@ return {
 		opts = {
 			bigfile = { enabled = true },
 			quickfile = { enabled = true },
+			scroll = {},
 			statuscolumn = {
 				left = { "mark", "sign" }, -- priority of signs on the left (high to low)
 				right = { "fold", "git" }, -- priority of signs on the right (high to low)
@@ -40,7 +41,7 @@ return {
 			vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
 				callback = function()
 					local git_root = Snacks.git.get_root()
-					vim.api.nvim_set_current_dir(git_root)
+					vim.api.nvim_set_current_dir(git_root and git_root or vim.fn.getcwd())
 				end,
 			})
 		end,
