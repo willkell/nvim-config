@@ -210,7 +210,7 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		event = enterFileEvent,
+		event = "VeryLazy",
 		config = function()
 			local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 

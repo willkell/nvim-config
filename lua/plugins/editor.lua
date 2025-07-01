@@ -235,10 +235,10 @@ return {
     { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
   },
 },
-	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, event = enterFileEvent },
+	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, event = "VeryLazy" },
 	{
 		"nmac427/guess-indent.nvim",
-		event = enterFileEvent,
+		event = "VeryLazy",
 		config = function()
 			require("guess-indent").setup({})
 		end,
