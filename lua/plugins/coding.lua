@@ -36,10 +36,6 @@ return {
 				callback = function(event)
 					local opts = { buffer = event.buf }
 					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-					vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-					vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-					vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-					vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
 					vim.keymap.set("n", "gx", "<cmd>lua vim.diagnostic.get()<cr>", opts)
 					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 					vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
@@ -98,8 +94,29 @@ return {
 		"folke/trouble.nvim",
 		opts = {}, -- for default options, refer to the configuration section for custom setup.
 		cmd = "Trouble",
+		specs = {
+			"folke/snacks.nvim",
+			opts = function(_, opts)
+				return vim.tbl_deep_extend("force", opts or {}, {
+					picker = {
+						actions = require("trouble.sources.snacks").actions,
+						win = {
+							input = {
+								keys = {
+									["<c-t>"] = {
+										"trouble_open",
+										mode = { "n", "i" },
+									},
+								},
+							},
+						},
+					},
+				})
+			end,
+		},
 		keys = {
 			{
+
 				"<leader>xx",
 				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "Diagnostics (Trouble)",

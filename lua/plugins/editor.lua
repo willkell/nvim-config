@@ -11,60 +11,6 @@ return {
 		end,
 	},
 	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-tree/nvim-web-devicons",
-			"MunifTanjim/nui.nvim",
-		},
-		cmd = "Neotree",
-		keys = {
-			{
-				"<leader>tf",
-				function()
-					require("neo-tree.command").execute({ toggle = true })
-				end,
-			},
-			{
-				"<leader>tg",
-				function()
-					require("neo-tree.command").execute({ source = "git_status", toggle = true })
-				end,
-				desc = "Git Explorer",
-			},
-			{
-				"<leader>tb",
-				function()
-					require("neo-tree.command").execute({ source = "buffers", toggle = true })
-				end,
-				desc = "Buffer Explorer",
-			},
-		},
-		init = function()
-			-- FIX: use `autocmd` for lazy-loading neo-tree instead of directly requiring it,
-			-- because `cwd` is not set up properly.
-			vim.api.nvim_create_autocmd("BufEnter", {
-				group = vim.api.nvim_create_augroup("Neotree_start_directory", { clear = true }),
-				desc = "Start Neo-tree with directory",
-				once = true,
-				callback = function()
-					if package.loaded["neo-tree"] then
-						return
-					else
-						local stats = vim.uv.fs_stat(vim.fn.argv(0))
-						if stats and stats.type == "directory" then
-							require("neo-tree")
-						end
-					end
-				end,
-			})
-		end,
-		---@module "neo-tree"
-		---@type neotree.Config?
-		opts = {},
-	},
-	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "f-person/git-blame.nvim" },
 		event = "VeryLazy",
@@ -130,7 +76,7 @@ return {
 					python = { "black" },
 					javascript = { "prettier" },
 					typescriptreact = { "prettier" },
-					html = { "prettier"},
+					html = { "prettier" },
 				},
 			})
 		end,
@@ -166,39 +112,6 @@ return {
 		end,
 	},
 	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope-frecency.nvim",
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
-			},
-		},
-		keys = {
-			"<leader>ff",
-			"<leader>fg",
-			"<leader>fb",
-			"<leader>fh",
-			"<leader>fr",
-			"<leader>ft",
-		},
-		config = function()
-			local opts = { silent = true, remap = false }
-			local telescope = require("telescope")
-			local tel_built = require("telescope.builtin")
-			telescope.load_extension("frecency")
-
-			-- telescope Mappings
-			vim.keymap.set("n", "<leader>ff", tel_built.find_files, opts)
-			vim.keymap.set("n", "<leader>fF", tel_built.git_files, opts)
-			vim.keymap.set("n", "<leader>fg", tel_built.live_grep, opts)
-			vim.keymap.set("n", "<leader>fb", tel_built.buffers, opts)
-			vim.keymap.set("n", "<leader>fh", tel_built.help_tags, opts)
-			vim.keymap.set("n", "<leader>fr", telescope.extensions.frecency.frecency, opts)
-		end,
-	},
-	{
 		"nvim-neorg/neorg",
 		dependencies = { "luarocks.nvim" },
 		ft = ".norg",
@@ -222,10 +135,10 @@ return {
 		end,
 	},
 	{
-  "folke/flash.nvim",
-  event = "VeryLazy",
-  ---@type Flash.Config
-  opts = {},
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		---@type Flash.Config
+		opts = {},
   -- stylua: ignore
   keys = {
     { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
@@ -234,7 +147,45 @@ return {
     { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
     { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
   },
-},
+		specs = {
+			{
+				"folke/snacks.nvim",
+				opts = {
+					picker = {
+						win = {
+							input = {
+								keys = {
+									["<a-s>"] = { "flash", mode = { "n", "i" } },
+									["s"] = { "flash" },
+								},
+							},
+						},
+						actions = {
+							flash = function(picker)
+								require("flash").jump({
+									pattern = "^",
+									label = { after = { 0, 0 } },
+									search = {
+										mode = "search",
+										exclude = {
+											function(win)
+												return vim.bo[vim.api.nvim_win_get_buf(win)].filetype
+													~= "snacks_picker_list"
+											end,
+										},
+									},
+									action = function(match)
+										local idx = picker.list:row2idx(match.pos[1])
+										picker.list:_move(idx, true, true)
+									end,
+								})
+							end,
+						},
+					},
+				},
+			},
+		},
+	},
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, event = "VeryLazy" },
 	{
 		"nmac427/guess-indent.nvim",
