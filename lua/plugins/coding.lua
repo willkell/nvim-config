@@ -292,4 +292,5 @@ return {
 			require("mini.ai").setup(opts)
 		end,
 	},
+	{ "Glench/Vim-Jinja2-Syntax" },
 }

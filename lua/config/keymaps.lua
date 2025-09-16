@@ -59,14 +59,22 @@ map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 
-map("n", "<leader>s", function()
+-- save
+map("n", "<leader>w", function()
 	vim.api.nvim_command("write")
 end, opts)
+
 -- easy quit
 map("n", "<leader>qq", "<cmd>qa<cr>", opts)
-map("n", "<leader>wq", "<cmd>xa<cr>", opts)
 
-map("n", "gf", function()
-	local file = vim.fn.expand("<cfile>")
-	vim.cmd("edit " .. file)
-end, { noremap = true, silent = true })
+-- Yank into system clipboard
+vim.keymap.set({'n', 'v'}, '<leader>y', '"+y') -- yank motion
+vim.keymap.set({'n', 'v'}, '<leader>Y', '"+Y') -- yank line
+
+-- Delete into system clipboard
+vim.keymap.set({'n', 'v'}, '<leader>d', '"+d') -- delete motion
+vim.keymap.set({'n', 'v'}, '<leader>D', '"+D') -- delete line
+
+-- Paste from system clipboard
+vim.keymap.set('n', '<leader>p', '"+p')  -- paste after cursor
+vim.keymap.set('n', '<leader>P', '"+P')  -- paste before cursor
