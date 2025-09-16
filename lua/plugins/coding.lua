@@ -79,6 +79,9 @@ return {
 						score_offset = 100,
 					},
 				},
+				per_filetype = {
+					codecompanion = { "codecompanion" },
+				},
 			},
 			fuzzy = { implementation = "prefer_rust_with_warning" },
 			signature = { enabled = true },
@@ -293,4 +296,31 @@ return {
 		end,
 	},
 	{ "Glench/Vim-Jinja2-Syntax" },
+	{
+		"olimorris/codecompanion.nvim",
+		opts = {
+			display = {
+		diff = {
+			provider = MiniDiff
+		},
+	},
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+	},
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown", "codecompanion" },
+	},
+	{
+		"echasnovski/mini.diff",
+	},
+	{
+		"zbirenbaum/copilot.lua",
+		event = "VeryLazy",
+		config = function()
+			require("copilot").setup({})
+		end,
+	},
 }
