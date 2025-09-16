@@ -28,7 +28,6 @@ return {
 					blink_cmp = {
 						style = "bordered",
 					},
-					gitsigns = true,
 					leap = true,
 					mason = true,
 					neotree = true,
