@@ -77,6 +77,7 @@ return {
 					javascript = { "prettier" },
 					typescriptreact = { "prettier" },
 					html = { "prettier" },
+					typst = { "typstyle" },
 				},
 			})
 		end,
