@@ -5,23 +5,19 @@ return {
 		"neovim/nvim-lspconfig",
 		event = enterFileEvent,
 		config = function()
-			local lspconfig = require("lspconfig")
-			lspconfig.lua_ls.setup({
+			vim.lsp.config("lua_ls", {
 				settings = {
 					Lua = {
 						runtime = {
 							version = "LuaJIT",
 						},
 						diagnostics = {
-							globals = { "vim" }, -- <--- THIS IS THE KEY LINE
+							globals = { "vim" },
 						},
 						workspace = {
-							-- Tell the language server to find Lua files in Neovim runtime and lazy.nvim folders
 							library = {
 								vim.env.VIMRUNTIME,
 								vim.fn.stdpath("config"),
-								-- If you use lazy.nvim, you might want to add its root
-								-- This will help LuaLS find definitions in your installed plugins
 								vim.fn.stdpath("data") .. "/lazy",
 							},
 							checkThirdParty = false,

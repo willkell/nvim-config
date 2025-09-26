@@ -78,6 +78,7 @@ return {
 					typescriptreact = { "prettier" },
 					html = { "prettier" },
 					typst = { "typstyle" },
+					json = { "prettier" },
 				},
 			})
 		end,
