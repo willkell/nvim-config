@@ -48,3 +48,6 @@ end
 
 -- statusline
 vim.opt.statuscolumn = "%!" .. "require('snacks.statuscolumn').get()" .. "!%"
+
+-- Don't save terminals, window size, window position on screen, or help
+vim.cmd("set sessionoptions-=help,resize,winpos,terminal")

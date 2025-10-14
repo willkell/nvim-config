@@ -305,6 +305,13 @@ return {
 						},
 					},
 				},
+				chat = {
+					window = {
+						layout = "vertical",
+						position = "right",
+						width = 0.3,
+					},
+				},
 			},
 		},
 		dependencies = {
