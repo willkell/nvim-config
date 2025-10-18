@@ -116,9 +116,33 @@ return {
 	{
 		"nvim-neorg/neorg",
 		dependencies = { "luarocks.nvim" },
-		ft = ".norg",
+		ft = "norg",
 		version = "*",
-		config = true,
+		config = function()
+			require("neorg").setup({
+				load = {
+					["external.interim-ls"] = {
+						config = {
+							completion_provider = {
+								enable = true,
+								documentation = true,
+								categories = false,
+								people = {
+									enable = false,
+									path = "people",
+								},
+							},
+						},
+					},
+				},
+			})
+			vim.wo.foldlevel = 99
+			vim.wo.conceallevel = 2
+		end,
+	},
+	{
+		"benlubas/neorg-interim-ls",
+		ft = "norg",
 	},
 	{
 		"kevinhwang91/nvim-ufo",
