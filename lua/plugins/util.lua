@@ -92,7 +92,6 @@ return {
 			{ "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
 			{ "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
 			{ "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-			{ "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
 			{ "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
 			-- find
 			{ "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
@@ -147,7 +146,6 @@ return {
 			-- Other
 			{ "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
 			{ "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
-			{ "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
 			{ "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
 			{ "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
 			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
