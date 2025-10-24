@@ -1,3 +1,12 @@
+local function term_nav(dir)
+	---@param self snacks.terminal
+	return function(self)
+		return self:is_floating() and "<c-" .. dir .. ">" or vim.schedule(function()
+			vim.cmd.wincmd(dir)
+		end)
+	end
+end
+
 return {
 	"nvim-lua/plenary.nvim",
 	{
@@ -24,7 +33,7 @@ return {
 			dashboard = {
 				sections = {
 					{ section = "header" },
-					{ section = "keys", gap = 1, padding = 2},
+					{ section = "keys", gap = 1, padding = 2 },
 					{
 						icon = " ",
 						title = "Recent Files",
@@ -34,6 +43,18 @@ return {
 					},
 					{ icon = " ", title = "Projects", section = "projects", indent = 2, padding = 2 },
 					{ section = "startup" },
+				},
+			},
+			terminal = {
+				win = {
+					keys = {
+						nav_h = { "<C-h>", term_nav("h"), desc = "Go to Left Window", expr = true, mode = "t" },
+						nav_j = { "<C-j>", term_nav("j"), desc = "Go to Lower Window", expr = true, mode = "t" },
+						nav_k = { "<C-k>", term_nav("k"), desc = "Go to Upper Window", expr = true, mode = "t" },
+						nav_l = { "<C-l>", term_nav("l"), desc = "Go to Right Window", expr = true, mode = "t" },
+						hide_slash = { "<C-/>", "hide", desc = "Hide Terminal", mode = { "t", "n" } },
+						hide_underscore = { "<c-_>", "hide", desc = "which_key_ignore", mode = { "t", "n" } },
+					},
 				},
 			},
 			quickfile = { enabled = true },
