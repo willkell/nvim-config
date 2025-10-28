@@ -79,6 +79,7 @@ return {
 					html = { "prettier" },
 					typst = { "typstyle" },
 					json = { "prettier" },
+					sql = { "sql-formatter" },
 				},
 			})
 		end,
