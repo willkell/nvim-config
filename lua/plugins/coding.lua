@@ -32,7 +32,7 @@ return {
 				callback = function(event)
 					local opts = { buffer = event.buf }
 					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-					vim.keymap.set("n", "gx", "<cmd>lua vim.diagnostic.get()<cr>", opts)
+					vim.keymap.set("n", "gq", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
 					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 					vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
 					vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
@@ -295,10 +295,20 @@ return {
 	{
 		"olimorris/codecompanion.nvim",
 		opts = {
+			interactions = {
+				chat = {
+					adapter = "claude_code",
+				},
+				background = {
+					chat = {
+						adapter = "claude_code"
+					},
+				},
+			},
 			display = {
 				diff = {
 					enabled = true,
-					provider = "mini_diff",
+					provider = "inline",
 					provider_opts = {
 						inline = {
 							layout = "buffer",
@@ -311,6 +321,25 @@ return {
 						position = "right",
 						width = 0.3,
 					},
+				},
+			},
+			adapters = {
+				acp = {
+					gemini_cli = function()
+						return require("codecompanion.adapters").extend("gemini_cli", {
+							cmd = "yolo",
+							defaults = {
+								auth_method = "oauth-personal", -- "oauth-personal"|"gemini-api-key"|"vertex-ai"
+							},
+						})
+					end,
+					claude_code = function()
+						return require("codecompanion.adapters").extend("claude_code", {
+							env = {
+								CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token"
+							},
+						})
+					end,
 				},
 			},
 		},
