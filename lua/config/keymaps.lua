@@ -60,7 +60,7 @@ map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 
 -- save
-map("n", "<leader>w", function()
+map("n", "<leader>.", function()
 	vim.api.nvim_command("write")
 end, opts)
 
