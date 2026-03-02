@@ -146,7 +146,10 @@ return {
 		event = "VeryLazy",
 		---@type Flash.Config
 		opts = {
-			labels = "ciaehtnsqyouldwzbkxfmpgvj"
+			labels = "ciaehtnsqyouldwzbkxfmpgvj",
+			treesitter = {
+				labels = "ciaehtnsqyouldwzbkxfmpgvj",
+			},
 		},
 		-- stylua: ignore
 		keys = {

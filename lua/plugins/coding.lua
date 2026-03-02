@@ -1,5 +1,37 @@
 local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
 
+-- load treesitter automatically
+vim.api.nvim_create_autocmd({ "Filetype" }, {
+	callback = function(event)
+		-- make sure nvim-treesitter is loaded
+		local ok, nvim_treesitter = pcall(require, "nvim-treesitter")
+
+		-- no nvim-treesitter, maybe fresh install
+		if not ok then
+			return
+		end
+
+		local parsers = require("nvim-treesitter.parsers")
+
+		if not parsers[event.match] or not nvim_treesitter.install then
+			return
+		end
+
+		local ft = vim.bo[event.buf].ft
+		local lang = vim.treesitter.language.get_lang(ft)
+		nvim_treesitter.install({ lang }):await(function(err)
+			if err then
+				vim.notify("Treesitter install error for ft: " .. ft .. " err: " .. err)
+				return
+			end
+
+			pcall(vim.treesitter.start, event.buf)
+			vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		end)
+	end,
+})
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -175,66 +207,187 @@ return {
 			},
 		},
 	},
-	{
+	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		event = enterFileEvent,
-		build = ":TSUpdate",
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = true,
-				},
-				indent = { enable = true },
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "<CR>",
-						scope_incremental = "<CR>",
-						node_incremental = "<TAB>",
-						node_decremental = "<S-TAB>",
-					},
-				},
-				textobjects = {
-					move = {
-						enable = true,
-						goto_next_start = {
-							["]f"] = "@function.outer",
-							["]c"] = "@class.outer",
-							["]a"] = "@parameter.inner",
-						},
-						goto_next_end = {
-							["]F"] = "@function.outer",
-							["]C"] = "@class.outer",
-							["]A"] = "@parameter.inner",
-						},
-						goto_previous_start = {
-							["[f"] = "@function.outer",
-							["[c"] = "@class.outer",
-							["[a"] = "@parameter.inner",
-						},
-						goto_previous_end = {
-							["[F"] = "@function.outer",
-							["[C"] = "@class.outer",
-							["[A"] = "@parameter.inner",
-						},
-					},
-				},
-			})
+		event = "VeryLazy",
+		dependencies = {
+			{ "folke/ts-comments.nvim", opts = {} },
+		},
+
+		branch = "main",
+		build = function()
+			-- update parsers, if TSUpdate exists
+			if vim.fn.exists(":TSUpdate") == 2 then
+				vim.cmd("TSUpdate")
+			end
+		end,
+
+		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+		---@module 'nvim-treesitter'
+		---@type TSConfig
+		---@diagnostic disable-next-line: missing-fields
+
+		config = function(_, _)
+			local ensure_installed = {
+				"bash",
+				"c",
+				"css",
+				"diff",
+				"gitcommit",
+				"html",
+				"javascript",
+				"lua",
+				"luadoc",
+				"markdown",
+				"markdown_inline",
+				"query",
+				"vim",
+				"vimdoc",
+				"python",
+			}
+
+			-- make sure nvim-treesitter can load
+			local ok, nvim_treesitter = pcall(require, "nvim-treesitter")
+
+			-- no nvim-treesitter, maybe fresh install
+			if not ok then
+				return
+			end
+
+			nvim_treesitter.install(ensure_installed)
 		end,
 	},
+
+	---@module 'lazy'
+	---@type LazySpec
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		event = "VeryLazy",
-		config = function()
-			local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
 
-			-- Repeat movement with ; and ,
-			-- ensure ; goes forward and , goes backward regardless of the last direction
-			vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
-			vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
-		end,
+		branch = "main",
+
+		keys = {
+			{
+				"[f",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
+				end,
+				desc = "prev function",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]f",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
+				end,
+				desc = "next function",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"[F",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
+				end,
+				desc = "prev function end",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]F",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
+				end,
+				desc = "next function end",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"[a",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@parameter.outer", "textobjects")
+				end,
+				desc = "prev argument",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]a",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@parameter.outer", "textobjects")
+				end,
+				desc = "next argument",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"[A",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_end("@parameter.outer", "textobjects")
+				end,
+				desc = "prev argument end",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]A",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_end("@parameter.outer", "textobjects")
+				end,
+				desc = "next argument end",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"[s",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_start("@block.outer", "textobjects")
+				end,
+				desc = "prev block",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]s",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_start("@block.outer", "textobjects")
+				end,
+				desc = "next block",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"[S",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_previous_end("@block.outer", "textobjects")
+				end,
+				desc = "prev block",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"]S",
+				function()
+					require("nvim-treesitter-textobjects.move").goto_next_end("@block.outer", "textobjects")
+				end,
+				desc = "next block",
+				mode = { "n", "x", "o" },
+			},
+			{
+				"gan",
+				function()
+					require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
+				end,
+				desc = "swap next argument",
+			},
+			{
+				"gap",
+				function()
+					require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner")
+				end,
+				desc = "swap prev argument",
+			},
+		},
+
+		opts = {
+			move = {
+				enable = true,
+				set_jumps = true,
+			},
+			swap = {
+				enable = true,
+			},
+		},
 	},
 	{
 		"windwp/nvim-autopairs",
@@ -301,7 +454,7 @@ return {
 				},
 				background = {
 					chat = {
-						adapter = "claude_code"
+						adapter = "claude_code",
 					},
 				},
 			},
@@ -336,7 +489,7 @@ return {
 					claude_code = function()
 						return require("codecompanion.adapters").extend("claude_code", {
 							env = {
-								CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token"
+								CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token",
 							},
 						})
 					end,
