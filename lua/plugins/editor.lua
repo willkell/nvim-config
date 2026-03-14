@@ -80,6 +80,7 @@ return {
 					typst = { "typstyle" },
 					json = { "prettier" },
 					sql = { "sql-formatter" },
+					nix = { "nixfmt" },
 				},
 			})
 		end,
