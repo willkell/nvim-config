@@ -450,11 +450,11 @@ return {
 		opts = {
 			interactions = {
 				chat = {
-					adapter = "claude_code",
+					adapter = "codex",
 				},
 				background = {
 					chat = {
-						adapter = "claude_code",
+						adapter = "codex",
 					},
 				},
 			},
@@ -490,6 +490,13 @@ return {
 						return require("codecompanion.adapters").extend("claude_code", {
 							env = {
 								CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token",
+							},
+						})
+					end,
+					codex = function()
+						return require("codecompanion.adapters").extend("codex", {
+							defaults = {
+								auth_method = "chatgpt",
 							},
 						})
 					end,
