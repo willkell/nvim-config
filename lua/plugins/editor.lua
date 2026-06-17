@@ -29,7 +29,6 @@ return {
 			vim.o.laststatus = vim.g.lualine_laststatus
 			require("lualine").setup({
 				options = {
-					theme = "catppuccin",
 					globalstatus = vim.o.laststatus == 3,
 					disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
 				},
