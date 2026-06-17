@@ -74,6 +74,7 @@ return {
 					-- Conform will run multiple formatters sequentially
 					python = { "black" },
 					javascript = { "prettier" },
+					typescript = { "prettier" },
 					typescriptreact = { "prettier" },
 					html = { "prettier" },
 					typst = { "typstyle" },
