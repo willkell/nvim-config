@@ -46,5 +46,14 @@ if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
 	end
 end
 
--- Don't save terminals, window size, window position on screen, or help
-vim.cmd("set sessionoptions-=help,resize,winpos,terminal")
+-- Don't save terminals, window size, window position on screen, blank buffers,or help
+vim.opt.sessionoptions = {
+  "buffers",
+  "curdir",
+  "folds",
+  "globals",
+  "tabpages",
+  "winsize",
+  "skiprtp",
+  "localoptions",
+}
