@@ -447,62 +447,71 @@ return {
 	{ "Glench/Vim-Jinja2-Syntax" },
 	{
 		"olimorris/codecompanion.nvim",
-		opts = {
-			interactions = {
-				chat = {
-					adapter = "codex",
-				},
-				background = {
+		opts = function()
+			local opts = {
+				interactions = {
 					chat = {
 						adapter = "codex",
 					},
-				},
-			},
-			display = {
-				diff = {
-					enabled = true,
-					provider = "inline",
-					provider_opts = {
-						inline = {
-							layout = "buffer",
+					background = {
+						chat = {
+							adapter = "codex",
 						},
 					},
 				},
-				chat = {
-					window = {
-						layout = "vertical",
-						position = "right",
-						width = 0.3,
+				display = {
+					diff = {
+						enabled = true,
+						provider = "inline",
+						provider_opts = {
+							inline = {
+								layout = "buffer",
+							},
+						},
+					},
+					chat = {
+						window = {
+							layout = "vertical",
+							position = "right",
+							width = 0.3,
+						},
 					},
 				},
-			},
-			adapters = {
-				acp = {
-					gemini_cli = function()
-						return require("codecompanion.adapters").extend("gemini_cli", {
-							cmd = "yolo",
-							defaults = {
-								auth_method = "oauth-personal", -- "oauth-personal"|"gemini-api-key"|"vertex-ai"
-							},
-						})
-					end,
-					claude_code = function()
-						return require("codecompanion.adapters").extend("claude_code", {
-							env = {
-								CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token",
-							},
-						})
-					end,
-					codex = function()
-						return require("codecompanion.adapters").extend("codex", {
-							defaults = {
-								auth_method = "chatgpt",
-							},
-						})
-					end,
+				adapters = {
+					acp = {
+						gemini_cli = function()
+							return require("codecompanion.adapters").extend("gemini_cli", {
+								cmd = "yolo",
+								defaults = {
+									auth_method = "oauth-personal", -- "oauth-personal"|"gemini-api-key"|"vertex-ai"
+								},
+							})
+						end,
+						claude_code = function()
+							return require("codecompanion.adapters").extend("claude_code", {
+								env = {
+									CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Private/Claude/token",
+								},
+							})
+						end,
+						codex = function()
+							return require("codecompanion.adapters").extend("codex", {
+								defaults = {
+									auth_method = "chatgpt",
+								},
+							})
+						end,
+					},
 				},
-			},
-		},
+			}
+
+			local ok, local_config = pcall(require, "local")
+			if ok and type(local_config) == "table" and local_config.codecompanion then
+				opts = vim.tbl_deep_extend("force", opts, local_config.codecompanion)
+			end
+
+			return opts
+		end,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-mini/mini.diff",

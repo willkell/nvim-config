@@ -4,3 +4,4 @@ tags
 undodir
 ftplugin
 lazy-lock.json
+lua/local.lua
