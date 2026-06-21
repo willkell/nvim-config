@@ -82,6 +82,7 @@ end, opts)
 
 -- easy quit
 map("n", "<leader>qq", "<cmd>qa<cr>", opts)
+map("n", "<leader>ww", "<cmd>wa<cr>", opts)
 
 -- Yank into system clipboard
 map({ "n", "v" }, "<leader>y", '"+y') -- yank motion
