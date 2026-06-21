@@ -13,11 +13,27 @@ map({ "n", "i" }, "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true
 map({ "n", "i" }, "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map({ "n", "i" }, "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
--- Resize window using <ctrl> arrow keys
-map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
-map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
-map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
-map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
+-- Resize window using <ctrl> arrow keys.
+-- The shared border follows the arrow direction regardless of where the
+-- current window sits relative to its neighbors.
+local function resize_horizontal(dir)
+	-- true when there is a window to the right of the current one
+	local has_right = vim.fn.winnr("l") ~= vim.fn.winnr()
+	local grow = (dir == "right") == has_right
+	vim.cmd("vertical resize " .. (grow and "+2" or "-2"))
+end
+
+local function resize_vertical(dir)
+	-- true when there is a window below the current one
+	local has_below = vim.fn.winnr("j") ~= vim.fn.winnr()
+	local grow = (dir == "down") == has_below
+	vim.cmd("resize " .. (grow and "+2" or "-2"))
+end
+
+map("n", "<C-Up>", function() resize_vertical("up") end, { desc = "Resize Window Up" })
+map("n", "<C-Down>", function() resize_vertical("down") end, { desc = "Resize Window Down" })
+map("n", "<C-Left>", function() resize_horizontal("left") end, { desc = "Resize Window Left" })
+map("n", "<C-Right>", function() resize_horizontal("right") end, { desc = "Resize Window Right" })
 map("n", "<leader>wo", ":only<CR>", opts)
 
 -- Move Lines
