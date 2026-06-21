@@ -77,11 +77,23 @@ map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 
 -- save
 map("n", "<leader>.", function()
-	vim.api.nvim_command("write")
+	vim.cmd.update() -- only saves when the file is changed
 end, opts)
 
 -- easy quit
-map("n", "<leader>qq", "<cmd>qa<cr>", opts)
+-- Snacks' terminal closes its own window on ExitPre, which aborts :qa when run
+-- from inside the terminal. Step out to a normal window first, then quit all.
+map("n", "<leader>qq", function()
+	if vim.bo.buftype == "terminal" then
+		for _, win in ipairs(vim.api.nvim_list_wins()) do
+			if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "" then
+				vim.api.nvim_set_current_win(win)
+				break
+			end
+		end
+	end
+	vim.cmd("qa")
+end, opts)
 map("n", "<leader>ww", "<cmd>wa<cr>", opts)
 
 -- Yank into system clipboard
