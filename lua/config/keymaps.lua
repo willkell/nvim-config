@@ -108,6 +108,14 @@ map({ "n", "v" }, "<leader>D", '"+D') -- delete line
 map("n", "<leader>p", '"+p') -- paste after cursor
 map("n", "<leader>P", '"+P') -- paste before cursor
 
+-- Better control backspace
+map({'i', 't'}, '<C-BS>', '<C-w>', { noremap = true })
+map('c', '<C-BS>', '<C-w>', { noremap = true })
+-- Fallback for terminals translating Ctrl+Backspace to Ctrl+H
+map({'i', 't'}, '<C-H>', '<C-w>', { noremap = true })
+map('c', '<C-H>', '<C-w>', { noremap = true })
+
+
 -- diagnostic
 local diagnostic_goto = function(next, severity)
 	return function()
