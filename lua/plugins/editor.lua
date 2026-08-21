@@ -3,6 +3,14 @@ local enterFileEvent = { "BufReadPost", "BufNewFile", "BufWritePost" }
 return {
 	{ "numToStr/comment.nvim", opts = {}, event = "VeryLazy" },
 	{
+		"mrjones2014/smart-splits.nvim",
+		lazy = false,
+		opts = {
+			ignored_filetypes = { "nofile", "quickfix", "prompt" },
+			ignored_buftypes = { "nofile" },
+		},
+	},
+	{
 		"kylechui/nvim-surround",
 		version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
 		event = "VeryLazy",

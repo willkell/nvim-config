@@ -7,33 +7,19 @@ map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr =
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-map({ "n", "i" }, "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-map({ "n", "i" }, "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-map({ "n", "i" }, "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-map({ "n", "i" }, "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+-- Move to window using the <ctrl> hjkl keys.
+-- Routed through smart-splits.nvim so the same keys cross seamlessly into
+-- tmux panes when nvim is running inside a tmux pane (see ~/.tmux.conf).
+map("n", "<C-h>", function() require("smart-splits").move_cursor_left() end, { desc = "Go to Left Window" })
+map("n", "<C-j>", function() require("smart-splits").move_cursor_down() end, { desc = "Go to Lower Window" })
+map("n", "<C-k>", function() require("smart-splits").move_cursor_up() end, { desc = "Go to Upper Window" })
+map("n", "<C-l>", function() require("smart-splits").move_cursor_right() end, { desc = "Go to Right Window" })
 
--- Resize window using <ctrl> arrow keys.
--- The shared border follows the arrow direction regardless of where the
--- current window sits relative to its neighbors.
-local function resize_horizontal(dir)
-	-- true when there is a window to the right of the current one
-	local has_right = vim.fn.winnr("l") ~= vim.fn.winnr()
-	local grow = (dir == "right") == has_right
-	vim.cmd("vertical resize " .. (grow and "+2" or "-2"))
-end
-
-local function resize_vertical(dir)
-	-- true when there is a window below the current one
-	local has_below = vim.fn.winnr("j") ~= vim.fn.winnr()
-	local grow = (dir == "down") == has_below
-	vim.cmd("resize " .. (grow and "+2" or "-2"))
-end
-
-map("n", "<C-Up>", function() resize_vertical("up") end, { desc = "Resize Window Up" })
-map("n", "<C-Down>", function() resize_vertical("down") end, { desc = "Resize Window Down" })
-map("n", "<C-Left>", function() resize_horizontal("left") end, { desc = "Resize Window Left" })
-map("n", "<C-Right>", function() resize_horizontal("right") end, { desc = "Resize Window Right" })
+-- Resize window using <ctrl> arrow keys (also crosses into tmux panes).
+map("n", "<C-Up>", function() require("smart-splits").resize_up() end, { desc = "Resize Window Up" })
+map("n", "<C-Down>", function() require("smart-splits").resize_down() end, { desc = "Resize Window Down" })
+map("n", "<C-Left>", function() require("smart-splits").resize_left() end, { desc = "Resize Window Left" })
+map("n", "<C-Right>", function() require("smart-splits").resize_right() end, { desc = "Resize Window Right" })
 map("n", "<leader>wo", ":only<CR>", opts)
 
 -- Move Lines
